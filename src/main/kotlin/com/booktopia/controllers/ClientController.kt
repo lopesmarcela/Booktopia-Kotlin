@@ -31,6 +31,10 @@ class ClientController(
     fun findById(@PathVariable id: Int): ClientModel =
         clientService.findById(id)
 
+    @GetMapping("/active")
+    fun findByActive(): List<ClientModel> =
+        clientService.findByActive()
+
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun update(@PathVariable id: Int, @RequestBody client: PutClientRequest) {

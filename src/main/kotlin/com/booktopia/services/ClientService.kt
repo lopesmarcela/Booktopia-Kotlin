@@ -4,11 +4,10 @@ import com.booktopia.enums.StatusEnum
 import com.booktopia.models.ClientModel
 import com.booktopia.repositories.ClientRepository
 import org.springframework.stereotype.Service
-import java.lang.Exception
 
 @Service
 class ClientService(
-    val clientRepository: ClientRepository
+    val clientRepository: ClientRepository,
 ) {
 
     fun create(client: ClientModel){
@@ -24,6 +23,10 @@ class ClientService(
 
     fun findById(id: Int): ClientModel{
         return clientRepository.findById(id).orElseThrow()
+    }
+
+    fun findByActive():List<ClientModel>{
+        return clientRepository.findByStatus(StatusEnum.ACTIVE)
     }
 
     fun update(client: ClientModel){
