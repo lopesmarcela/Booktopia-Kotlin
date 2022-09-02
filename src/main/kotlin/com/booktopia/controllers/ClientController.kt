@@ -29,11 +29,13 @@ class ClientController(
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun update(@PathVariable id: Int, @RequestBody client: PutClientRequest) =
-       clientService.update(client.toClientModel(id))
+    fun update(@PathVariable id: Int, @RequestBody client: PutClientRequest) {
+        clientService.update(client.toClientModel(id))
+    }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun delete(@PathVariable id: Int) =
+    fun delete(@PathVariable id: Int) {
         clientService.delete(id)
+    }
 }

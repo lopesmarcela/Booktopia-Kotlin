@@ -9,5 +9,5 @@ fun PostClientRequest.toClientModel(): ClientModel{
 }
 
 fun PutClientRequest.toClientModel(id: Int): ClientModel{
-    return ClientModel(idClient = id,cpf = this.cpf, name = this.name, email = this.email ,address = this.address)
+    return ClientModel(id = id,cpf = this.cpf, name = this.name, email = this.email ,address = this.address)
 }

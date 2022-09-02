@@ -10,7 +10,7 @@ import javax.persistence.Id
 data class ClientModel (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var idClient: Int? = null,
+    var id: Int? = null,
     @Column
     var cpf: String,
     @Column

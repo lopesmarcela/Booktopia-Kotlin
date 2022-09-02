@@ -1,49 +1,43 @@
 package com.booktopia.services
 
-import com.booktopia.controllers.request.PostClientRequest
-import com.booktopia.controllers.request.PutClientRequest
 import com.booktopia.models.ClientModel
+import com.booktopia.repositories.ClientRepository
 import org.springframework.stereotype.Service
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestParam
+import java.lang.Exception
 
 @Service
-class ClientService {
-
-    val clients = mutableListOf<ClientModel>()
+class ClientService(
+    val clientRepository: ClientRepository
+) {
 
     fun create(client: ClientModel){
-        var id = if (clients.isEmpty()){
-            1
-        }else{
-            clients.last().idClient!!.plus(1)
-        }
-        client.idClient = id
-        clients.add(client)
+        clientRepository.save(client)
     }
 
-    fun findAll(name: String?): List<ClientModel>{
+    fun findAll(name: String?): List<ClientModel> {
         name?.let {
-            return clients.filter { it.name.contains(name, true) }
+            return clientRepository.findByNameContaining(it)
         }
-        return clients
+        return clientRepository.findAll().toList()
     }
 
     fun findById(id: Int): ClientModel{
-        return clients.filter { it.idClient == id }.first()
+        return clientRepository.findById(id).orElseThrow()
     }
 
     fun update(client: ClientModel){
-        clients.filter { it.idClient == client.idClient }.first().let {
-            it.cpf = it.cpf
-            it.name = client.name
-            it.email = client.email
-            it.address = client.address
+        if (!clientRepository.existsById(client.id!!)){
+            throw Exception()
         }
+
+        clientRepository.save(client)
     }
 
     fun delete(id: Int){
-        clients.removeIf { it.idClient == id }
+        if (!clientRepository.existsById(id)){
+            throw Exception()
+        }
+
+        clientRepository.deleteById(id)
     }
 }
