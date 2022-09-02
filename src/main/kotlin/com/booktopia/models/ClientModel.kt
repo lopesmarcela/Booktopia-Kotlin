@@ -1,10 +1,6 @@
 package com.booktopia.models
 
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
+import javax.persistence.*
 
 @Entity(name = "clients")
 data class ClientModel (
@@ -17,7 +13,8 @@ data class ClientModel (
     var name: String,
     @Column
     var email: String,
-    @Column
-    var address: String
+    @ManyToOne
+    @JoinColumn(name = "address_id")
+    var address: AddressModel? = null
 ){
 }
