@@ -1,10 +1,8 @@
-package com.booktopia.models
+package com.booktopia.controllers.request
 
-data class ClientModel (
-    var idClient: Int,
+data class PostClientRequest (
     var cpf: String,
     var name: String,
     var email: String,
     var address: String
-){
-}
+)
