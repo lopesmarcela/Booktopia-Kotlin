@@ -20,11 +20,14 @@ class ClientController {
         }else{
             clients.last().idClient+1
         }
-        clients.add(ClientModel(id,client.name, client.cpf, client.email ,client.address))
+        clients.add(ClientModel(id, client.cpf, client.name, client.email ,client.address))
     }
 
     @GetMapping
-    fun findAll(): List<ClientModel>{
+    fun findAll(@RequestParam name: String?): List<ClientModel>{
+        name?.let {
+            return clients.filter { it.name.contains(name, true) }
+        }
         return clients
     }
 
