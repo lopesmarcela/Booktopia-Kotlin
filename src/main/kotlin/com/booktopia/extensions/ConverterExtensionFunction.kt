@@ -7,12 +7,23 @@ import com.booktopia.controllers.request.PutClientRequest
 import com.booktopia.models.AddressModel
 import com.booktopia.models.ClientModel
 
-fun PostClientRequest.toClientModel(): ClientModel{
-    return ClientModel(cpf = this.cpf, name = this.name, email = this.email )
+fun PostClientRequest.toClientModel(address: AddressModel): ClientModel{
+    return ClientModel(
+        cpf = this.cpf,
+        name = this.name,
+        email = this.email,
+        address = address
+    )
 }
 
-fun PutClientRequest.toClientModel(id: Int): ClientModel{
-    return ClientModel(id = id,cpf = this.cpf, name = this.name, email = this.email)
+fun PutClientRequest.toClientModel(previousValue: ClientModel): ClientModel{
+    return ClientModel(
+        id = previousValue.id,
+        cpf = previousValue.cpf,
+        name = this.name?:previousValue.name,
+        email = this.email?:previousValue.email,
+        address = previousValue.address
+    )
 }
 
 fun PostAddressRequest.toAddressModel(): AddressModel{
@@ -25,12 +36,13 @@ fun PostAddressRequest.toAddressModel(): AddressModel{
     )
 }
 
-fun PutAddressRequest.toAddressModel(id: Int): AddressModel{
+fun PutAddressRequest.toAddressModel(previousValue: AddressModel): AddressModel{
     return AddressModel(
-        street = this.street,
-        number = this.number,
-        district = this.district,
-        city = this.city,
-        cep = this.cep
+        id = previousValue.id,
+        street = this.street?:previousValue.street,
+        number = this.number?:previousValue.number,
+        district = this.district?:previousValue.district,
+        city = this.city?:previousValue.city,
+        cep = this.cep?:previousValue.cep
     )
 }

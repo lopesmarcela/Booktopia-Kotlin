@@ -4,6 +4,7 @@ import com.booktopia.controllers.request.PostClientRequest
 import com.booktopia.controllers.request.PutClientRequest
 import com.booktopia.extensions.toClientModel
 import com.booktopia.models.ClientModel
+import com.booktopia.services.AddressService
 import com.booktopia.services.ClientService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -11,13 +12,16 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("client")
 class ClientController(
-    val clientService: ClientService
+    val clientService: ClientService,
+    val addressService: AddressService
 ) {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(@RequestBody client: PostClientRequest) =
-        clientService.create(client.toClientModel())
+    fun create(@RequestBody client: PostClientRequest) {
+        var address = addressService.findById(client.addressId)
+        clientService.create(client.toClientModel(address))
+    }
 
     @GetMapping
     fun findAll(@RequestParam name: String?): List<ClientModel> =
@@ -30,7 +34,8 @@ class ClientController(
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun update(@PathVariable id: Int, @RequestBody client: PutClientRequest) {
-        clientService.update(client.toClientModel(id))
+        val clientSaved = clientService.findById(id)
+        clientService.update(client.toClientModel(clientSaved))
     }
 
     @DeleteMapping("/{id}")

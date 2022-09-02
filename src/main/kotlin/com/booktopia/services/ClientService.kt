@@ -26,10 +26,6 @@ class ClientService(
     }
 
     fun update(client: ClientModel){
-        if (!clientRepository.existsById(client.id!!)){
-            throw Exception()
-        }
-
         clientRepository.save(client)
     }
 

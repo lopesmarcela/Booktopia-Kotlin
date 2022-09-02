@@ -23,10 +23,6 @@ class AddressService(
     }
 
     fun update(address: AddressModel){
-        if (!addressRepository.existsById(address.id!!)){
-            throw Exception()
-        }
-
         addressRepository.save(address)
     }
 
