@@ -1,5 +1,6 @@
 package com.booktopia.services
 
+import com.booktopia.enums.StatusEnum
 import com.booktopia.models.ClientModel
 import com.booktopia.repositories.ClientRepository
 import org.springframework.stereotype.Service
@@ -30,10 +31,8 @@ class ClientService(
     }
 
     fun delete(id: Int){
-        if (!clientRepository.existsById(id)){
-            throw Exception()
-        }
-
-        clientRepository.deleteById(id)
+        var client = findById(id)
+        client.status = StatusEnum.INACTIVE
+        update(client)
     }
 }

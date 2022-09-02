@@ -1,5 +1,6 @@
 package com.booktopia.services
 
+import com.booktopia.enums.StatusEnum
 import com.booktopia.models.AddressModel
 import com.booktopia.repositories.AddressRepository
 import org.springframework.stereotype.Service
@@ -27,10 +28,8 @@ class AddressService(
     }
 
     fun delete(id: Int){
-        if (!addressRepository.existsById(id)){
-            throw Exception()
-        }
-
-        addressRepository.deleteById(id)
+        val address = findById(id)
+        address.status = StatusEnum.INACTIVE
+        update(address)
     }
 }

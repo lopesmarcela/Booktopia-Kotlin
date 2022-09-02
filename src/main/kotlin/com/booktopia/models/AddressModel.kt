@@ -1,10 +1,7 @@
 package com.booktopia.models
 
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
+import com.booktopia.enums.StatusEnum
+import javax.persistence.*
 
 @Entity(name = "adresses")
 data class AddressModel (
@@ -20,6 +17,10 @@ data class AddressModel (
     @Column
     var city: String,
     @Column
-    var cep: String
+    var cep: String,
+    @Column
+    @Enumerated(EnumType.STRING)
+    var status: StatusEnum? = null
+
 ){
 }

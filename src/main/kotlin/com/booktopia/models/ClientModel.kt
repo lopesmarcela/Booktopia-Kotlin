@@ -1,5 +1,6 @@
 package com.booktopia.models
 
+import com.booktopia.enums.StatusEnum
 import javax.persistence.*
 
 @Entity(name = "clients")
@@ -15,6 +16,9 @@ data class ClientModel (
     var email: String,
     @ManyToOne
     @JoinColumn(name = "address_id")
-    var address: AddressModel? = null
+    var address: AddressModel? = null,
+    @Column
+    @Enumerated(EnumType.STRING)
+    var status: StatusEnum? = null
 ){
 }

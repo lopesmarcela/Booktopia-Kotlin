@@ -4,6 +4,7 @@ import com.booktopia.controllers.request.PostAddressRequest
 import com.booktopia.controllers.request.PostClientRequest
 import com.booktopia.controllers.request.PutAddressRequest
 import com.booktopia.controllers.request.PutClientRequest
+import com.booktopia.enums.StatusEnum
 import com.booktopia.models.AddressModel
 import com.booktopia.models.ClientModel
 
@@ -12,7 +13,8 @@ fun PostClientRequest.toClientModel(address: AddressModel): ClientModel{
         cpf = this.cpf,
         name = this.name,
         email = this.email,
-        address = address
+        address = address,
+        status = StatusEnum.ACTIVE
     )
 }
 
@@ -22,7 +24,8 @@ fun PutClientRequest.toClientModel(previousValue: ClientModel): ClientModel{
         cpf = previousValue.cpf,
         name = this.name?:previousValue.name,
         email = this.email?:previousValue.email,
-        address = previousValue.address
+        address = previousValue.address,
+        status = previousValue.status
     )
 }
 
@@ -32,7 +35,8 @@ fun PostAddressRequest.toAddressModel(): AddressModel{
         number = this.number,
         district = this.district,
         city = this.city,
-        cep = this.cep
+        cep = this.cep,
+        status = StatusEnum.ACTIVE
     )
 }
 
@@ -43,6 +47,7 @@ fun PutAddressRequest.toAddressModel(previousValue: AddressModel): AddressModel{
         number = this.number?:previousValue.number,
         district = this.district?:previousValue.district,
         city = this.city?:previousValue.city,
-        cep = this.cep?:previousValue.cep
+        cep = this.cep?:previousValue.cep,
+        status = previousValue.status
     )
 }
