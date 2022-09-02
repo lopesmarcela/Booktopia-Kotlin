@@ -2,53 +2,38 @@ package com.booktopia.controllers
 
 import com.booktopia.controllers.request.PostClientRequest
 import com.booktopia.controllers.request.PutClientRequest
+import com.booktopia.extensions.toClientModel
 import com.booktopia.models.ClientModel
+import com.booktopia.services.ClientService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("client")
-class ClientController {
-
-    val clients = mutableListOf<ClientModel>()
+class ClientController(
+    val clientService: ClientService
+) {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(@RequestBody client: PostClientRequest){
-        var id = if (clients.isEmpty()){
-            1
-        }else{
-            clients.last().idClient+1
-        }
-        clients.add(ClientModel(id, client.cpf, client.name, client.email ,client.address))
-    }
+    fun create(@RequestBody client: PostClientRequest) =
+        clientService.create(client.toClientModel())
 
     @GetMapping
-    fun findAll(@RequestParam name: String?): List<ClientModel>{
-        name?.let {
-            return clients.filter { it.name.contains(name, true) }
-        }
-        return clients
-    }
+    fun findAll(@RequestParam name: String?): List<ClientModel> =
+        clientService.findAll(name)
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable id: Int): ClientModel{
-        return clients.filter { it.idClient == id }.first()
-    }
+    fun findById(@PathVariable id: Int): ClientModel =
+        clientService.findById(id)
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun update(@PathVariable id: Int, @RequestBody client: PutClientRequest){
-       clients.filter { it.idClient == id }.first().let {
-           it.name = client.name
-           it.email = client.email
-           it.address = client.address
-       }
-    }
+    fun update(@PathVariable id: Int, @RequestBody client: PutClientRequest) =
+       clientService.update(client.toClientModel(id))
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun delete(@PathVariable id: Int){
-        clients.removeIf { it.idClient == id }
-    }
+    fun delete(@PathVariable id: Int) =
+        clientService.delete(id)
 }
