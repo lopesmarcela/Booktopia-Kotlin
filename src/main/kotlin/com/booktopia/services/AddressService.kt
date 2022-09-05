@@ -2,6 +2,7 @@ package com.booktopia.services
 
 import com.booktopia.enums.StatusEnum
 import com.booktopia.models.AddressModel
+import com.booktopia.models.ClientModel
 import com.booktopia.repositories.AddressRepository
 import org.springframework.stereotype.Service
 import java.lang.Exception

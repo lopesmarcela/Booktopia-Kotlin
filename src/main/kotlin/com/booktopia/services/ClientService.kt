@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service
 @Service
 class ClientService(
     val clientRepository: ClientRepository,
+    val addressService: AddressService
 ) {
 
     fun create(client: ClientModel){
@@ -36,6 +37,11 @@ class ClientService(
     fun delete(id: Int){
         var client = findById(id)
         client.status = StatusEnum.INACTIVE
+
+        //disabling customer address
+        var address = addressService.findById(client.address!!.id!!)
+        addressService.delete(address.id!!)
+
         update(client)
     }
 }
