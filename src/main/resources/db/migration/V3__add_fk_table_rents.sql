@@ -1,0 +1,1 @@
+ALTER TABLE rents ADD CONSTRAINT fk_books FOREIGN KEY (book_id) REFERENCES books (id);

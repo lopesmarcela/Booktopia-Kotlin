@@ -6,6 +6,7 @@ import com.booktopia.enums.StatusEnum
 import com.booktopia.models.AddressModel
 import com.booktopia.models.BookModel
 import com.booktopia.models.ClientModel
+import com.booktopia.models.RentModel
 
 fun PostClientRequest.toClientModel(address: AddressModel): ClientModel{
     return ClientModel(
@@ -75,5 +76,27 @@ fun PutBookRequest.toBookModel(previousValue: BookModel): BookModel{
         price = this.price?:previousValue.price,
         inventory = this.inventory?:previousValue.inventory,
         status = previousValue.status
+    )
+}
+
+fun PostRentRequest.toRentModel(client: ClientModel, book: BookModel):RentModel{
+    return RentModel(
+        rentalDate = this.rentalDate,
+        client = client,
+        book = book,
+        status = StatusEnum.ACTIVE
+    )
+}
+
+fun PutRentRequest.toRentModel(previousValue: RentModel):RentModel{
+    return RentModel(
+        id = previousValue.id,
+        fine = this.fine?: previousValue.fine,
+        totalValue = this.totalValue?: previousValue.totalValue,
+        rentalDate = previousValue.rentalDate,
+        returnDate = this.returnDate,
+        client = previousValue.client,
+        book = previousValue.book,
+        status = StatusEnum.INACTIVE
     )
 }

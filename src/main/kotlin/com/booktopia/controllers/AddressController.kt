@@ -29,9 +29,9 @@ class AddressController(
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun update(@PathVariable id: Int, @RequestBody client: PutAddressRequest) {
+    fun update(@PathVariable id: Int, @RequestBody address: PutAddressRequest) {
         val addressSaved = addressService.findById(id)
-        addressService.update(client.toAddressModel(addressSaved))
+        addressService.update(address.toAddressModel(addressSaved))
     }
 
     @DeleteMapping("/{id}")
