@@ -1,11 +1,10 @@
 package com.booktopia.extensions
 
-import com.booktopia.controllers.request.PostAddressRequest
-import com.booktopia.controllers.request.PostClientRequest
-import com.booktopia.controllers.request.PutAddressRequest
-import com.booktopia.controllers.request.PutClientRequest
+import com.booktopia.controllers.request.*
+import com.booktopia.enums.StatusBook
 import com.booktopia.enums.StatusEnum
 import com.booktopia.models.AddressModel
+import com.booktopia.models.BookModel
 import com.booktopia.models.ClientModel
 
 fun PostClientRequest.toClientModel(address: AddressModel): ClientModel{
@@ -48,6 +47,33 @@ fun PutAddressRequest.toAddressModel(previousValue: AddressModel): AddressModel{
         district = this.district?:previousValue.district,
         city = this.city?:previousValue.city,
         cep = this.cep?:previousValue.cep,
+        status = previousValue.status
+    )
+}
+
+fun PostBookRequest.toBookModel(): BookModel{
+    return BookModel(
+        title = this.title,
+        description = this.description,
+        releaseDate = this.releaseDate,
+        category = this.category,
+        author = this.author,
+        price = this.price,
+        inventory = this.inventory,
+        status = StatusEnum.ACTIVE
+    )
+}
+
+fun PutBookRequest.toBookModel(previousValue: BookModel): BookModel{
+    return BookModel(
+        id = previousValue.id,
+        title = previousValue.title,
+        description = previousValue.description,
+        releaseDate = previousValue.releaseDate,
+        category = previousValue.category,
+        author = previousValue.author,
+        price = this.price?:previousValue.price,
+        inventory = this.inventory?:previousValue.inventory,
         status = previousValue.status
     )
 }
