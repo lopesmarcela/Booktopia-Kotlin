@@ -5,10 +5,10 @@ import com.booktopia.models.BookModel
 import com.booktopia.models.RentModel
 import com.booktopia.repositories.RentRepository
 import org.springframework.stereotype.Service
-import java.lang.Exception
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import java.util.Vector
+import kotlin.Exception
 
 @Service
 class RentService(
@@ -17,6 +17,17 @@ class RentService(
 ) {
 
     fun create(rent: RentModel){
+        var book = bookService.findById(rent.book!!.id!!)
+        if(book.status == StatusEnum.INACTIVE){
+            throw Exception("Book Inactive!")
+        }
+        //decreasing 1 book in stock
+        book.inventory-= 1
+        //deactivating book if there is no stock
+        if(book.inventory == 0){
+            bookService.delete(book.id!!)
+        }
+        bookService.update(book)
         rentRepository.save(rent)
     }
 
@@ -29,6 +40,9 @@ class RentService(
     }
 
     fun returnBook(rent: RentModel){
+        if (rent.status == StatusEnum.INACTIVE){
+            throw Exception("This book has already been returned")
+        }
         // converting rental date to LocalDateTime
         var splitRetalDate = Vector<String>(rent.rentalDate.split("/"))
         var year = splitRetalDate[0].toInt()
@@ -53,6 +67,10 @@ class RentService(
         var book: BookModel = bookService.findById(rent.book!!.id!!)
         rent.totalValue = rent.fine!! + book.price
 
+        book.inventory += 1
+        book.status = StatusEnum.ACTIVE
+
+        bookService.update(book)
         rentRepository.save(rent)
     }
 }

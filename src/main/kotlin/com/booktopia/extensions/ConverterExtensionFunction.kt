@@ -1,7 +1,6 @@
 package com.booktopia.extensions
 
 import com.booktopia.controllers.request.*
-import com.booktopia.enums.StatusBook
 import com.booktopia.enums.StatusEnum
 import com.booktopia.models.AddressModel
 import com.booktopia.models.BookModel
@@ -75,7 +74,7 @@ fun PutBookRequest.toBookModel(previousValue: BookModel): BookModel{
         author = previousValue.author,
         price = this.price?:previousValue.price,
         inventory = this.inventory?:previousValue.inventory,
-        status = previousValue.status
+        status = this.status?:previousValue.status
     )
 }
 

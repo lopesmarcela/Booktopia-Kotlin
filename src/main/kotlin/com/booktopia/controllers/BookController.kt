@@ -2,8 +2,6 @@ package com.booktopia.controllers
 
 import com.booktopia.controllers.request.PostBookRequest
 import com.booktopia.controllers.request.PutBookRequest
-import com.booktopia.enums.CategoryEnum
-import com.booktopia.enums.StatusBook
 import com.booktopia.extensions.toBookModel
 import com.booktopia.models.BookModel
 import com.booktopia.services.BookService

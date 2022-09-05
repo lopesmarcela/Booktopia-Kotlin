@@ -2,6 +2,7 @@ package com.booktopia.controllers
 
 import com.booktopia.controllers.request.PostRentRequest
 import com.booktopia.controllers.request.PutRentRequest
+import com.booktopia.enums.StatusEnum
 import com.booktopia.extensions.toRentModel
 import com.booktopia.models.RentModel
 import com.booktopia.services.BookService
