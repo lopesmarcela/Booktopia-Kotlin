@@ -2,7 +2,9 @@ package com.booktopia.controllers
 
 import com.booktopia.controllers.request.PostClientRequest
 import com.booktopia.controllers.request.PutClientRequest
+import com.booktopia.controllers.response.ClientResponse
 import com.booktopia.extensions.toClientModel
+import com.booktopia.extensions.toResponse
 import com.booktopia.models.ClientModel
 import com.booktopia.services.AddressService
 import com.booktopia.services.ClientService
@@ -24,16 +26,16 @@ class ClientController(
     }
 
     @GetMapping
-    fun findAll(@RequestParam name: String?): List<ClientModel> =
-        clientService.findAll(name)
+    fun findAll(@RequestParam name: String?): List<ClientResponse> =
+        clientService.findAll(name).map { it.toResponse() }
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable id: Int): ClientModel =
+    fun details(@PathVariable id: Int): ClientModel =
         clientService.findById(id)
 
     @GetMapping("/active")
-    fun findByActive(): List<ClientModel> =
-        clientService.findByActive()
+    fun findByActive(): List<ClientResponse> =
+        clientService.findByActive().map { it.toResponse() }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

@@ -1,6 +1,8 @@
 package com.booktopia.extensions
 
 import com.booktopia.controllers.request.*
+import com.booktopia.controllers.response.ClientResponse
+import com.booktopia.controllers.response.RentResponse
 import com.booktopia.enums.StatusEnum
 import com.booktopia.models.AddressModel
 import com.booktopia.models.BookModel
@@ -97,5 +99,29 @@ fun PutRentRequest.toRentModel(previousValue: RentModel):RentModel{
         client = previousValue.client,
         book = previousValue.book,
         status = StatusEnum.INACTIVE
+    )
+}
+
+fun RentModel.toResponse(): RentResponse{
+    return RentResponse(
+        id = this.id,
+        fine = this.fine,
+        totalValue = this.totalValue,
+        rentalDate = this.rentalDate,
+        returnDate = this.returnDate,
+        status = this.status,
+        clientId = this.client!!.id,
+        bookId = this.book!!.id
+    )
+}
+
+fun ClientModel.toResponse(): ClientResponse{
+    return ClientResponse(
+        id = this.id,
+        cpf = this.cpf,
+        name = this.name,
+        email = this.email,
+        addressId = this.address!!.id,
+        status = this.status
     )
 }

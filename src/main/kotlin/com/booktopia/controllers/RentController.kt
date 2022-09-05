@@ -2,8 +2,10 @@ package com.booktopia.controllers
 
 import com.booktopia.controllers.request.PostRentRequest
 import com.booktopia.controllers.request.PutRentRequest
+import com.booktopia.controllers.response.RentResponse
 import com.booktopia.enums.StatusEnum
 import com.booktopia.extensions.toRentModel
+import com.booktopia.extensions.toResponse
 import com.booktopia.models.RentModel
 import com.booktopia.services.BookService
 import com.booktopia.services.ClientService
@@ -28,11 +30,11 @@ class RentController(
     }
 
     @GetMapping
-    fun findAll():List<RentModel> =
-        rentService.findAll()
+    fun findAll():List<RentResponse> =
+        rentService.findAll().map { it.toResponse() }
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable id: Int): RentModel =
+    fun details (@PathVariable id: Int): RentModel =
         rentService.findById(id)
 
     @PutMapping("/{id}")
