@@ -1,7 +1,10 @@
 package com.booktopia.repositories
 
 import com.booktopia.models.RentModel
+import org.springframework.data.domain.Page
+import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.repository.CrudRepository
+import java.awt.print.Pageable
 
-interface RentRepository: CrudRepository<RentModel, Int> {
+interface RentRepository: JpaRepository<RentModel, Int> {
 }

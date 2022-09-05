@@ -3,6 +3,8 @@ package com.booktopia.services
 import com.booktopia.enums.StatusEnum
 import com.booktopia.models.BookModel
 import com.booktopia.repositories.BookRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 @Service
@@ -14,11 +16,11 @@ class BookService(
         bookRepository.save(book)
     }
 
-    fun findAll(title: String?): List<BookModel> {
+    fun findAll(title: String?, pageable: Pageable): Page<BookModel> {
         title?.let {
-            return bookRepository.findByTitleContaining(it)
+            return bookRepository.findByTitleContaining(it, pageable)
         }
-        return bookRepository.findAll().toList()
+        return bookRepository.findAll(pageable)
     }
 
     fun findById(id: Int): BookModel{

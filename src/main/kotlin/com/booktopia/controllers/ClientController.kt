@@ -8,6 +8,9 @@ import com.booktopia.extensions.toResponse
 import com.booktopia.models.ClientModel
 import com.booktopia.services.AddressService
 import com.booktopia.services.ClientService
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
@@ -26,8 +29,8 @@ class ClientController(
     }
 
     @GetMapping
-    fun findAll(@RequestParam name: String?): List<ClientResponse> =
-        clientService.findAll(name).map { it.toResponse() }
+    fun findAll(@RequestParam name: String?, @PageableDefault(page = 0, size = 5) pageable: Pageable): Page<ClientResponse> =
+        clientService.findAll(name,pageable).map { it.toResponse() }
 
     @GetMapping("/{id}")
     fun details(@PathVariable id: Int): ClientModel =

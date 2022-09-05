@@ -5,6 +5,9 @@ import com.booktopia.controllers.request.PutBookRequest
 import com.booktopia.extensions.toBookModel
 import com.booktopia.models.BookModel
 import com.booktopia.services.BookService
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
@@ -21,8 +24,8 @@ class BookController(
     }
 
     @GetMapping
-    fun findAll(@RequestParam title: String?): List<BookModel> =
-        bookService.findAll(title)
+    fun findAll(@RequestParam title: String?, @PageableDefault(page = 0, size = 5) pageable: Pageable): Page<BookModel> =
+        bookService.findAll(title, pageable)
 
     @GetMapping("/{id}")
     fun findById(@PathVariable id: Int): BookModel =

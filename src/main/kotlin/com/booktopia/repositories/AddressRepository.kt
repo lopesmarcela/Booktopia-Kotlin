@@ -1,7 +1,7 @@
 package com.booktopia.repositories
 
 import com.booktopia.models.AddressModel
-import org.springframework.data.repository.CrudRepository
+import org.springframework.data.jpa.repository.JpaRepository
 
-interface AddressRepository: CrudRepository<AddressModel, Int> {
+interface AddressRepository: JpaRepository<AddressModel, Int> {
 }

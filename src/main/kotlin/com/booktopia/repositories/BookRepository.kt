@@ -1,8 +1,10 @@
 package com.booktopia.repositories
 
 import com.booktopia.models.BookModel
-import org.springframework.data.repository.CrudRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.jpa.repository.JpaRepository
 
-interface BookRepository: CrudRepository<BookModel, Int> {
-    fun findByTitleContaining(title: String):List<BookModel>
+interface BookRepository: JpaRepository<BookModel, Int> {
+    fun findByTitleContaining(title: String, pageable: Pageable):Page<BookModel>
 }

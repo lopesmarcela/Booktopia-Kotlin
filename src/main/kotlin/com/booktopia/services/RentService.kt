@@ -4,6 +4,8 @@ import com.booktopia.enums.StatusEnum
 import com.booktopia.models.BookModel
 import com.booktopia.models.RentModel
 import com.booktopia.repositories.RentRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
@@ -31,8 +33,8 @@ class RentService(
         rentRepository.save(rent)
     }
 
-    fun findAll(): List<RentModel> {
-        return rentRepository.findAll().toList()
+    fun findAll(pageable: Pageable): Page<RentModel> {
+        return rentRepository.findAll(pageable)
     }
 
     fun findById(id: Int): RentModel{

@@ -2,10 +2,10 @@ package com.booktopia.services
 
 import com.booktopia.enums.StatusEnum
 import com.booktopia.models.AddressModel
-import com.booktopia.models.ClientModel
 import com.booktopia.repositories.AddressRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
-import java.lang.Exception
 
 @Service
 class AddressService(
@@ -16,8 +16,8 @@ class AddressService(
         addressRepository.save(address)
     }
 
-    fun findAll(): List<AddressModel> {
-        return addressRepository.findAll().toList()
+    fun findAll(pageable: Pageable): Page<AddressModel> {
+        return addressRepository.findAll(pageable)
     }
 
     fun findById(id: Int): AddressModel{

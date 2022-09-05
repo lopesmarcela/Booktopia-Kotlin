@@ -3,6 +3,8 @@ package com.booktopia.services
 import com.booktopia.enums.StatusEnum
 import com.booktopia.models.ClientModel
 import com.booktopia.repositories.ClientRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 @Service
@@ -15,11 +17,11 @@ class ClientService(
         clientRepository.save(client)
     }
 
-    fun findAll(name: String?): List<ClientModel> {
+    fun findAll(name: String?, pageable: Pageable): Page<ClientModel> {
         name?.let {
-            return clientRepository.findByNameContaining(it)
+            return clientRepository.findByNameContaining(it, pageable)
         }
-        return clientRepository.findAll().toList()
+        return clientRepository.findAll(pageable)
     }
 
     fun findById(id: Int): ClientModel{

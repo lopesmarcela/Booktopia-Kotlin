@@ -5,6 +5,9 @@ import com.booktopia.controllers.request.PutAddressRequest
 import com.booktopia.extensions.toAddressModel
 import com.booktopia.models.AddressModel
 import com.booktopia.services.AddressService
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
@@ -20,8 +23,8 @@ class AddressController(
         addressService.create(address.toAddressModel())
 
     @GetMapping
-    fun findAll():List<AddressModel> =
-        addressService.findAll()
+    fun findAll(@PageableDefault(page = 0, size = 5) pageable: Pageable):Page<AddressModel> =
+        addressService.findAll(pageable)
 
     @GetMapping("/{id}")
     fun findById(@PathVariable id: Int): AddressModel =
