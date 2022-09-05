@@ -28,7 +28,7 @@ class RentService(
         return rentRepository.findById(id).orElseThrow()
     }
 
-    fun update(rent: RentModel){
+    fun returnBook(rent: RentModel){
         // converting rental date to LocalDateTime
         var splitRetalDate = Vector<String>(rent.rentalDate.split("/"))
         var year = splitRetalDate[0].toInt()

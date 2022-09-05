@@ -36,8 +36,8 @@ class RentController(
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun update(@PathVariable id: Int, @RequestBody rent: PutRentRequest) {
+    fun returnBook(@PathVariable id: Int, @RequestBody rent: PutRentRequest) {
         val rentSaved = rentService.findById(id)
-        rentService.update(rent.toRentModel(rentSaved))
+        rentService.returnBook(rent.toRentModel(rentSaved))
     }
 }
