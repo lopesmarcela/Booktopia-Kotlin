@@ -30,7 +30,7 @@ class ClientController(
 
     @GetMapping
     fun findAll(@RequestParam name: String?, @PageableDefault(page = 0, size = 5) pageable: Pageable): Page<ClientResponse> =
-        clientService.findAll(name,pageable).map { it.toResponse() }
+        clientService.findAll(name, pageable).map { it.toResponse() }
 
     @GetMapping("/{id}")
     fun details(@PathVariable id: Int): ClientModel =

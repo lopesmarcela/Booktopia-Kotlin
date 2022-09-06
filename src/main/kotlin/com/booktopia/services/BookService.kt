@@ -1,6 +1,9 @@
 package com.booktopia.services
 
+import com.booktopia.enums.Errors
 import com.booktopia.enums.StatusEnum
+import com.booktopia.exception.BadRequestException
+import com.booktopia.exception.NotFoundException
 import com.booktopia.models.BookModel
 import com.booktopia.repositories.BookRepository
 import org.springframework.data.domain.Page
@@ -24,7 +27,7 @@ class BookService(
     }
 
     fun findById(id: Int): BookModel{
-        return bookRepository.findById(id).orElseThrow()
+        return bookRepository.findById(id).orElseThrow{ NotFoundException(Errors.B201.message.format(id), Errors.B201.code) }
     }
 
     fun update(book: BookModel){
@@ -33,6 +36,9 @@ class BookService(
 
     fun delete(id: Int){
         var book = findById(id)
+        if (book.status == StatusEnum.INACTIVE){
+            throw BadRequestException(Errors.B203.message.format(id), Errors.B203.code)
+        }
         book.status = StatusEnum.INACTIVE
         update(book)
     }

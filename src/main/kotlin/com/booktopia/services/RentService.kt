@@ -1,6 +1,9 @@
 package com.booktopia.services
 
+import com.booktopia.enums.Errors
 import com.booktopia.enums.StatusEnum
+import com.booktopia.exception.BadRequestException
+import com.booktopia.exception.NotFoundException
 import com.booktopia.models.BookModel
 import com.booktopia.models.RentModel
 import com.booktopia.repositories.RentRepository
@@ -15,13 +18,18 @@ import kotlin.Exception
 @Service
 class RentService(
     val rentRepository: RentRepository,
-    val bookService: BookService
+    val bookService: BookService,
+    val clientService: ClientService
 ) {
 
     fun create(rent: RentModel){
         var book = bookService.findById(rent.book!!.id!!)
+        var client = clientService.findById(rent.client!!.id!!)
         if(book.status == StatusEnum.INACTIVE){
-            throw Exception("Book Inactive!")
+            throw BadRequestException(Errors.B302.message.format(book.id), Errors.B302.code)
+        }
+        if(client.status == StatusEnum.INACTIVE){
+            throw BadRequestException(Errors.B303.message.format(book.id), Errors.B303.code)
         }
         //decreasing 1 book in stock
         book.inventory-= 1
@@ -38,12 +46,12 @@ class RentService(
     }
 
     fun findById(id: Int): RentModel{
-        return rentRepository.findById(id).orElseThrow()
+        return rentRepository.findById(id).orElseThrow{ NotFoundException(Errors.B301.message.format(id), Errors.B301.code) }
     }
 
     fun returnBook(rent: RentModel){
         if (rent.status == StatusEnum.INACTIVE){
-            throw Exception("This book has already been returned")
+            throw BadRequestException(Errors.B304.message.format(rent.id), Errors.B304.code)
         }
         // converting rental date to LocalDateTime
         var splitRetalDate = Vector<String>(rent.rentalDate.split("/"))

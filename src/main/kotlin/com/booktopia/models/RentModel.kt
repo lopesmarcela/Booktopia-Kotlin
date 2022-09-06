@@ -3,8 +3,6 @@ package com.booktopia.models
 import com.booktopia.enums.StatusEnum
 import com.fasterxml.jackson.annotation.JsonAlias
 import java.math.BigDecimal
-import java.time.LocalDateTime
-import java.time.temporal.ChronoUnit
 import javax.persistence.*
 
 
@@ -23,7 +21,7 @@ data class RentModel (
     var rentalDate: String,
     @Column
     @JsonAlias("return_date")
-    var returnDate: String? = "",
+    var returnDate: String? = null,
     @Column
     @Enumerated(EnumType.STRING)
     var status: StatusEnum? = null,

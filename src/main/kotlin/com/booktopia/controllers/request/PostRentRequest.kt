@@ -1,7 +1,5 @@
 package com.booktopia.controllers.request
 
-import com.booktopia.models.BookModel
-import com.booktopia.models.ClientModel
 import com.fasterxml.jackson.annotation.JsonAlias
 
 data class PostRentRequest (
