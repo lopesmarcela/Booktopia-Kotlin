@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("client")
@@ -23,7 +24,7 @@ class ClientController(
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(@RequestBody client: PostClientRequest) {
+    fun create(@RequestBody @Valid client: PostClientRequest) {
         var address = addressService.findById(client.addressId)
         clientService.create(client.toClientModel(address))
     }
@@ -42,7 +43,7 @@ class ClientController(
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun update(@PathVariable id: Int, @RequestBody client: PutClientRequest) {
+    fun update(@PathVariable id: Int, @RequestBody @Valid client: PutClientRequest) {
         val clientSaved = clientService.findById(id)
         clientService.update(client.toClientModel(clientSaved))
     }

@@ -53,4 +53,12 @@ class ClientService(
 
         update(client)
     }
+
+    fun emailAvailable(email: String): Boolean {
+        return !clientRepository.existsByEmail(email)
+    }
+
+    fun cpfAvailable(cpf: String): Boolean {
+        return !clientRepository.existsByCpf(cpf)
+    }
 }

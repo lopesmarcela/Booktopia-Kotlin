@@ -1,6 +1,8 @@
 package com.booktopia.enums
 
 enum class Errors(val code: String, val message: String) {
+    //Validation
+    B001("B-001","Invalid Request"),
     // Client errors 100-199
     B101("B-101","Client id [%s] not exists"),
     B103("B-103","Client id [%s] isn't active"),

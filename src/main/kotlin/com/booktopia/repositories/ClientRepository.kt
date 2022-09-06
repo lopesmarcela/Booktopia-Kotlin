@@ -10,4 +10,6 @@ interface ClientRepository: JpaRepository<ClientModel, Int> {
 
     fun findByStatus(status: StatusEnum): List<ClientModel>
     fun findByNameContaining(name: String, pageable: Pageable):Page<ClientModel>
+    fun existsByEmail(email: String) : Boolean
+    fun existsByCpf(cpf: String): Boolean
 }

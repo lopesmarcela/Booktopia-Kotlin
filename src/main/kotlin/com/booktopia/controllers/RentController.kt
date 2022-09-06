@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("rent")
@@ -25,7 +26,7 @@ class RentController(
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(@RequestBody rent: PostRentRequest) {
+    fun create(@RequestBody @Valid rent: PostRentRequest) {
         var client = clientService.findById(rent.clientId)
         var book = bookService.findById(rent.bookId)
         rentService.create(rent.toRentModel(client, book))
@@ -41,7 +42,7 @@ class RentController(
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun returnBook(@PathVariable id: Int, @RequestBody rent: PutRentRequest) {
+    fun returnBook(@PathVariable id: Int, @RequestBody @Valid rent: PutRentRequest) {
         val rentSaved = rentService.findById(id)
         rentService.returnBook(rent.toRentModel(rentSaved))
     }

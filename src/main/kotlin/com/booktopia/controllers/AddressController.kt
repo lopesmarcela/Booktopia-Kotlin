@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("address")
@@ -19,7 +20,7 @@ class AddressController(
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(@RequestBody address: PostAddressRequest) =
+    fun create(@RequestBody @Valid address: PostAddressRequest) =
         addressService.create(address.toAddressModel())
 
     @GetMapping
