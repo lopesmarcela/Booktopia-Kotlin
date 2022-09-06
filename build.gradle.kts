@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "2.7.3"
+	id("org.springframework.boot") version "2.5.7"
 	id("io.spring.dependency-management") version "1.0.13.RELEASE"
 	kotlin("jvm") version "1.6.21"
 	kotlin("plugin.spring") version "1.6.21"
@@ -25,6 +25,9 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("org.flywaydb:flyway-core:7.7.0")
 	implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.2.1")
+
+	implementation("io.springfox:springfox-swagger2:2.9.2")
+	implementation("io.springfox:springfox-swagger-ui:2.9.2")
 
 	runtimeOnly("org.postgresql:postgresql")
 
