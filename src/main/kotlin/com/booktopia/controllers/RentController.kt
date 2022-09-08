@@ -9,6 +9,7 @@ import com.booktopia.models.RentModel
 import com.booktopia.services.BookService
 import com.booktopia.services.ClientService
 import com.booktopia.services.RentService
+import io.swagger.annotations.ApiOperation
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
@@ -25,6 +26,7 @@ class RentController(
 ) {
 
     @PostMapping
+    @ApiOperation(value = "Registers a rent")
     @ResponseStatus(HttpStatus.CREATED)
     fun create(@RequestBody @Valid rent: PostRentRequest) {
         var client = clientService.findById(rent.clientId)
@@ -33,14 +35,17 @@ class RentController(
     }
 
     @GetMapping
+    @ApiOperation(value = "Returns a list of rents")
     fun findAll(@PageableDefault(page = 0, size = 5) pageable: Pageable): Page<RentResponse> =
         rentService.findAll(pageable).map { it.toResponse() }
 
     @GetMapping("/{id}")
+    @ApiOperation(value = "Details a rent")
     fun details (@PathVariable id: Int): RentModel =
         rentService.findById(id)
 
     @PutMapping("/{id}")
+    @ApiOperation(value = "Restore a rent")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun returnBook(@PathVariable id: Int, @RequestBody @Valid rent: PutRentRequest) {
         val rentSaved = rentService.findById(id)

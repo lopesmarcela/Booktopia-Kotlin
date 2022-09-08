@@ -5,6 +5,7 @@ import com.booktopia.controllers.request.PutBookRequest
 import com.booktopia.extensions.toBookModel
 import com.booktopia.models.BookModel
 import com.booktopia.services.BookService
+import io.swagger.annotations.ApiOperation
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
@@ -19,20 +20,24 @@ class BookController(
 ) {
 
     @PostMapping
+    @ApiOperation(value = "Creates a book")
     @ResponseStatus(HttpStatus.CREATED)
     fun create(@RequestBody @Valid book: PostBookRequest) {
         bookService.create(book.toBookModel())
     }
 
     @GetMapping
+    @ApiOperation(value = "Returns a list of books")
     fun findAll(@RequestParam title: String?, @PageableDefault(page = 0, size = 5) pageable: Pageable): Page<BookModel> =
         bookService.findAll(title, pageable)
 
     @GetMapping("/{id}")
+    @ApiOperation(value = "Returns a book by id")
     fun findById(@PathVariable id: Int): BookModel =
         bookService.findById(id)
 
     @PutMapping("/{id}")
+    @ApiOperation(value = "Changes a book")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun update(@PathVariable id: Int, @RequestBody book: PutBookRequest) {
         val bookSaved = bookService.findById(id)
@@ -40,6 +45,7 @@ class BookController(
     }
 
     @DeleteMapping("/{id}")
+    @ApiOperation(value = "Disables a book")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(@PathVariable id: Int) {
         bookService.delete(id)

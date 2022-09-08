@@ -1,6 +1,7 @@
 package com.booktopia.models
 
 import com.booktopia.enums.StatusEnum
+import io.swagger.annotations.ApiModelProperty
 import javax.persistence.*
 
 @Entity(name = "adresses")
