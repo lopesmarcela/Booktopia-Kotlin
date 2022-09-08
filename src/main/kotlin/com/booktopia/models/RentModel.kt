@@ -2,7 +2,9 @@ package com.booktopia.models
 
 import com.booktopia.enums.StatusEnum
 import com.fasterxml.jackson.annotation.JsonAlias
+import kotlinx.datetime.LocalDateTime
 import java.math.BigDecimal
+import java.time.LocalDate
 import javax.persistence.*
 
 
@@ -18,18 +20,20 @@ data class RentModel (
     var totalValue: BigDecimal? = null,
     @Column
     @JsonAlias("rental_date")
-    var rentalDate: String,
+    var rentalDate: LocalDate,
     @Column
     @JsonAlias("return_date")
-    var returnDate: String? = null,
+    var returnDate: LocalDate? = null,
     @Column
     @Enumerated(EnumType.STRING)
     var status: StatusEnum? = null,
     @ManyToOne
     @JoinColumn(name = "client_id")
     var client: ClientModel? = null,
-    @ManyToOne
-    @JoinColumn(name = "book_id")
-    var book: BookModel? = null
+    @ManyToMany
+    @JoinTable(name = "rent_book",
+        joinColumns = [JoinColumn(name = "rent_id")],
+        inverseJoinColumns = [JoinColumn(name = "book_id")])
+    var books: List<BookModel>? = null
 ){
 }

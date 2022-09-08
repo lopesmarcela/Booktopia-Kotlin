@@ -53,18 +53,18 @@ fun PutAddressRequest.toAddressModel(previousValue: AddressModel): AddressModel{
     )
 }
 
-fun PostBookRequest.toBookModel(): BookModel{
-    return BookModel(
-        title = this.title,
-        description = this.description,
-        releaseDate = this.releaseDate,
-        category = this.category,
-        author = this.author,
-        price = this.price,
-        inventory = this.inventory,
-        status = StatusEnum.ACTIVE
-    )
-}
+//fun PostBookRequest.toBookModel(): BookModel{
+//    return BookModel(
+//        title = this.title,
+//        description = this.description,
+//        releaseDate = this.releaseDate,
+//        category = this.category,
+//        author = this.author,
+//        price = this.price,
+//        inventory = this.inventory,
+//        status = StatusEnum.ACTIVE
+//    )
+//}
 
 fun PutBookRequest.toBookModel(previousValue: BookModel): BookModel{
     return BookModel(
@@ -80,40 +80,40 @@ fun PutBookRequest.toBookModel(previousValue: BookModel): BookModel{
     )
 }
 
-fun PostRentRequest.toRentModel(client: ClientModel, book: BookModel):RentModel{
-    return RentModel(
-        rentalDate = this.rentalDate,
-        client = client,
-        book = book,
-        status = StatusEnum.ACTIVE
-    )
-}
+//fun PostRentRequest.toRentModel(client: ClientModel, book: BookModel):RentModel{
+//    return RentModel(
+//        rentalDate = this.rentalDate,
+//        client = client,
+//        book = book,
+//        status = StatusEnum.ACTIVE
+//    )
+//}
 
-fun PutRentRequest.toRentModel(previousValue: RentModel):RentModel{
-    return RentModel(
-        id = previousValue.id,
-        fine = this.fine?: previousValue.fine,
-        totalValue = this.totalValue?: previousValue.totalValue,
-        rentalDate = previousValue.rentalDate,
-        returnDate = this.returnDate,
-        client = previousValue.client,
-        book = previousValue.book,
-        status = StatusEnum.INACTIVE
-    )
-}
+//fun PutRentRequest.toRentModel(previousValue: RentModel):RentModel{
+//    return RentModel(
+//        id = previousValue.id,
+//        fine = this.fine?: previousValue.fine,
+//        totalValue = this.totalValue?: previousValue.totalValue,
+//        rentalDate = previousValue.rentalDate,
+//        returnDate = this.returnDate,
+//        client = previousValue.client,
+//        book = previousValue.book,
+//        status = StatusEnum.INACTIVE
+//    )
+//}
 
-fun RentModel.toResponse(): RentResponse{
-    return RentResponse(
-        id = this.id,
-        fine = this.fine,
-        totalValue = this.totalValue,
-        rentalDate = this.rentalDate,
-        returnDate = this.returnDate,
-        status = this.status,
-        clientId = this.client!!.id,
-        bookId = this.book!!.id
-    )
-}
+//fun RentModel.toResponse(): RentResponse{
+//    return RentResponse(
+//        id = this.id,
+//        fine = this.fine,
+//        totalValue = this.totalValue,
+//        rentalDate = this.rentalDate,
+//        returnDate = this.returnDate,
+//        status = this.status,
+//        clientId = this.client!!.id,
+//        bookId = this.book!!.id
+//    )
+//}
 
 fun ClientModel.toResponse(): ClientResponse{
     return ClientResponse(

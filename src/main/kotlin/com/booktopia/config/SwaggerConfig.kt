@@ -22,7 +22,7 @@ class SwaggerConfig {
 
             .apiInfo(ApiInfoBuilder()
                 .title("Booktopia")
-                .description("Api Booktopia")
+                .description("Sistema gerenciador de aluguel de livros")
                 .build())
 
     }

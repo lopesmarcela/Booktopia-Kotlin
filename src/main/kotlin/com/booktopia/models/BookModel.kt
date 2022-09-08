@@ -3,6 +3,7 @@ package com.booktopia.models
 import com.booktopia.enums.CategoryEnum
 import com.booktopia.enums.StatusEnum
 import com.fasterxml.jackson.annotation.JsonAlias
+import java.time.LocalDate
 import java.math.BigDecimal
 import javax.persistence.*
 
@@ -17,7 +18,7 @@ data class BookModel (
     var description: String,
     @Column
     @JsonAlias("release_date")
-    var releaseDate: String,
+    var releaseDate: LocalDate,
     @Column
     @Enumerated(EnumType.STRING)
     var category: CategoryEnum? = null,

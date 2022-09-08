@@ -21,7 +21,7 @@ class BookController(
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun create(@RequestBody @Valid book: PostBookRequest) {
-        bookService.create(book.toBookModel())
+        //bookService.create(book.toBookModel())
     }
 
     @GetMapping
