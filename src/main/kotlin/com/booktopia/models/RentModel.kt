@@ -30,10 +30,8 @@ data class RentModel (
     @ManyToOne
     @JoinColumn(name = "client_id")
     var client: ClientModel? = null,
-    @ManyToMany
-    @JoinTable(name = "rent_book",
-        joinColumns = [JoinColumn(name = "rent_id")],
-        inverseJoinColumns = [JoinColumn(name = "book_id")])
-    var books: List<BookModel>? = null
+    @ManyToOne
+    @JoinColumn(name = "book_id")
+    var book: BookModel? = null
 ){
 }

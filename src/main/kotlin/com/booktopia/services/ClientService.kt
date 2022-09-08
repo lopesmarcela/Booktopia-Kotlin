@@ -18,6 +18,9 @@ class ClientService(
 ) {
 
     fun create(client: ClientModel){
+        var address = addressService.findById(client.address!!.id!!)
+        if( address.status == StatusEnum.INACTIVE)
+            throw BadRequestException(Errors.B403.message.format(address.id), Errors.B403.code)
         clientRepository.save(client)
     }
 

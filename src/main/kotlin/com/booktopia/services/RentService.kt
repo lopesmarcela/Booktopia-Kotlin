@@ -4,6 +4,7 @@ import com.booktopia.enums.Errors
 import com.booktopia.enums.StatusEnum
 import com.booktopia.exception.BadRequestException
 import com.booktopia.exception.NotFoundException
+import com.booktopia.extensions.calculateFine
 import com.booktopia.models.BookModel
 import com.booktopia.models.RentModel
 import com.booktopia.repositories.RentRepository
@@ -22,65 +23,43 @@ class RentService(
     val clientService: ClientService
 ) {
 
-//    fun create(rent: RentModel){
-//        var book = bookService.findById(rent.book!!.id!!)
-//        var client = clientService.findById(rent.client!!.id!!)
-//        if(book.status == StatusEnum.INACTIVE){
-//            throw BadRequestException(Errors.B302.message.format(book.id), Errors.B302.code)
-//        }
-//        if(client.status == StatusEnum.INACTIVE){
-//            throw BadRequestException(Errors.B303.message.format(book.id), Errors.B303.code)
-//        }
-//        //decreasing 1 book in stock
-//        book.inventory-= 1
-//        //deactivating book if there is no stock
-//        if(book.inventory == 0){
-//            bookService.delete(book.id!!)
-//        }
-//        bookService.update(book)
-//        rentRepository.save(rent)
-//    }
-//
-//    fun findAll(pageable: Pageable): Page<RentModel> {
-//        return rentRepository.findAll(pageable)
-//    }
-//
-//    fun findById(id: Int): RentModel{
-//        return rentRepository.findById(id).orElseThrow{ NotFoundException(Errors.B301.message.format(id), Errors.B301.code) }
-//    }
-//
-//    fun returnBook(rent: RentModel){
-//        if (rent.status == StatusEnum.INACTIVE){
-//            throw BadRequestException(Errors.B304.message.format(rent.id), Errors.B304.code)
-//        }
-//        // converting rental date to LocalDateTime
-//        var splitRetalDate = Vector<String>(rent.rentalDate.split("/"))
-//        var year = splitRetalDate[0].toInt()
-//        var mounth = splitRetalDate[1].toInt()
-//        var day = splitRetalDate[2].toInt()
-//        var rentalDate2: LocalDateTime = LocalDateTime.of(year, mounth, day,0,0,0)
-//
-//        // converting rental date to LocalDateTime
-//        var splitReturnDate = Vector<String>(rent.returnDate!!.split("/"))
-//        var yearReturn = splitReturnDate[0].toInt()
-//        var mounthReturn = splitReturnDate[1].toInt()
-//        var dayReturn = splitReturnDate[2].toInt()
-//        var returnDate2: LocalDateTime = LocalDateTime.of(yearReturn, mounthReturn, dayReturn,0,0,0)
-//
-//        //calculating difference of days
-//        var totalDays: Long = rentalDate2.until(returnDate2, ChronoUnit.DAYS)
-//        // calculating difference of 10 days
-//        var fineDays: Int =  totalDays.toInt() - 10
-//
-//        rent.fine = if(fineDays > 0 ) (fineDays * 1.00).toBigDecimal() else 0.0.toBigDecimal()
-//
-//        var book: BookModel = bookService.findById(rent.book!!.id!!)
-//        rent.totalValue = rent.fine!! + book.price
-//
-//        book.inventory += 1
-//        book.status = StatusEnum.ACTIVE
-//
-//        bookService.update(book)
-//        rentRepository.save(rent)
-//    }
+    fun create(rent: RentModel){
+        var book = bookService.findById(rent.book!!.id!!)
+        var client = clientService.findById(rent.client!!.id!!)
+        if(book.status == StatusEnum.INACTIVE){
+            throw BadRequestException(Errors.B302.message.format(book.id), Errors.B302.code)
+        }
+        if(client.status == StatusEnum.INACTIVE){
+            throw BadRequestException(Errors.B303.message.format(book.id), Errors.B303.code)
+        }
+        //decreasing 1 book in stock
+        book.inventory-= 1
+        //deactivating book if there is no stock
+        if(book.inventory == 0){
+            bookService.delete(book.id!!)
+        }
+        bookService.update(book)
+        rentRepository.save(rent)
+    }
+
+    fun findAll(pageable: Pageable): Page<RentModel> {
+        return rentRepository.findAll(pageable)
+    }
+
+    fun findById(id: Int): RentModel{
+        return rentRepository.findById(id).orElseThrow{ NotFoundException(Errors.B301.message.format(id), Errors.B301.code) }
+    }
+
+    fun returnBook(rent: RentModel){
+        rent.fine = rent.calculateFine(rent)
+
+        var book: BookModel = bookService.findById(rent.book!!.id!!)
+        rent.totalValue = rent.fine!! + book.price
+
+        book.inventory += 1
+        book.status = if (book.inventory > 0) StatusEnum.ACTIVE else StatusEnum.INACTIVE
+
+        bookService.update(book)
+        rentRepository.save(rent)
+    }
 }
