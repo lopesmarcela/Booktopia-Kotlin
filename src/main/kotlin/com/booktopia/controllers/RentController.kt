@@ -9,6 +9,7 @@ import com.booktopia.models.RentModel
 import com.booktopia.services.BookService
 import com.booktopia.services.ClientService
 import com.booktopia.services.RentService
+import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
 @RestController
+@Api(value = "", tags = ["Rent"])
 @RequestMapping("rent")
 class RentController(
     val rentService: RentService,

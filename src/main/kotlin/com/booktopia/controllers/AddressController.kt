@@ -5,7 +5,9 @@ import com.booktopia.controllers.request.PutAddressRequest
 import com.booktopia.extensions.toAddressModel
 import com.booktopia.models.AddressModel
 import com.booktopia.services.AddressService
+import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
+import io.swagger.annotations.Tag
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
 @RestController
+@Api(value = "", tags = ["Address"])
 @RequestMapping("address")
 class AddressController(
     val addressService: AddressService

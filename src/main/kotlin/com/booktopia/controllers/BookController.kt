@@ -5,6 +5,7 @@ import com.booktopia.controllers.request.PutBookRequest
 import com.booktopia.extensions.toBookModel
 import com.booktopia.models.BookModel
 import com.booktopia.services.BookService
+import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
 @RestController
+@Api(value = "", tags = ["Book"])
 @RequestMapping("book")
 class BookController(
     val bookService: BookService
