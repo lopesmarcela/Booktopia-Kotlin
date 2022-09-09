@@ -1,6 +1,7 @@
 package com.booktopia.extensions
 
 import com.booktopia.controllers.request.*
+import com.booktopia.controllers.response.AdminResponse
 import com.booktopia.controllers.response.ClientResponse
 import com.booktopia.controllers.response.RentResponse
 import com.booktopia.enums.StatusEnum
@@ -143,6 +144,16 @@ fun ClientModel.toResponse(): ClientResponse{
         name = this.name,
         email = this.email,
         addressId = this.address!!.id,
+        status = this.status
+    )
+}
+
+fun AdminModel.toResponse(): AdminResponse{
+    return AdminResponse(
+        id = this.id,
+        cpf = this.cpf,
+        name = this.name,
+        email = this.email,
         status = this.status
     )
 }

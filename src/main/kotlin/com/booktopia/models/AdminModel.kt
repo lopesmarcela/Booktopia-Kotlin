@@ -1,5 +1,6 @@
 package com.booktopia.models
 
+import com.booktopia.enums.Profile
 import com.booktopia.enums.StatusEnum
 import javax.persistence.*
 
@@ -18,6 +19,12 @@ data class AdminModel (
     var password: String,
     @Column
     @Enumerated(EnumType.STRING)
-    var status: StatusEnum? = null
+    var status: StatusEnum? = null,
+
+    @Column(name="role")
+    @Enumerated(EnumType.STRING)
+    @ElementCollection(targetClass = Profile::class, fetch = FetchType.EAGER)
+    @CollectionTable(name="admin_roles", joinColumns = [JoinColumn(name = "admin_id")])
+    var roles: Set<Profile> = setOf()
 ){
 }

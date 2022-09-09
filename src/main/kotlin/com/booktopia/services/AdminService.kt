@@ -1,6 +1,7 @@
 package com.booktopia.services
 
 import com.booktopia.enums.Errors
+import com.booktopia.enums.Profile
 import com.booktopia.enums.StatusEnum
 import com.booktopia.exception.BadRequestException
 import com.booktopia.exception.NotFoundException
@@ -17,7 +18,10 @@ class AdminService(
 ) {
 
     fun create(admin: AdminModel){
-        adminRepository.save(admin)
+        val adminCopy = admin.copy(
+            roles = setOf(Profile.ADMIN)
+        )
+        adminRepository.save(adminCopy)
     }
 
     fun findAll( pageable: Pageable): Page<AdminModel> {

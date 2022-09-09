@@ -2,8 +2,9 @@ package com.booktopia.controllers
 
 import com.booktopia.controllers.request.PostAdminRequest
 import com.booktopia.controllers.request.PutAdminRequest
+import com.booktopia.controllers.response.AdminResponse
 import com.booktopia.extensions.toAdminModel
-import com.booktopia.models.AdminModel
+import com.booktopia.extensions.toResponse
 import com.booktopia.services.AdminService
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
@@ -30,13 +31,13 @@ class AdminController(
 
     @GetMapping
     @ApiOperation(value = "Returns a list of admins")
-    fun findAll( @PageableDefault(page = 0, size = 5) pageable: Pageable): Page<AdminModel> =
-        adminService.findAll(pageable).map { it }
+    fun findAll( @PageableDefault(page = 0, size = 5) pageable: Pageable): Page<AdminResponse> =
+        adminService.findAll(pageable).map { it.toResponse() }
 
     @GetMapping("/{id}")
     @ApiOperation(value = "Returns a admin by id")
-    fun findById(@PathVariable id: Int): AdminModel =
-        adminService.findById(id)
+    fun findById(@PathVariable id: Int): AdminResponse =
+        adminService.findById(id).toResponse()
 
     @PutMapping("/{id}")
     @ApiOperation(value = "Changes a admin")
