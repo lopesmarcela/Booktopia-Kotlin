@@ -8,4 +8,5 @@ interface AdminRepository: JpaRepository<AdminModel, Int> {
 
     fun existsByEmail(email: String) : Boolean
     fun existsByCpf(cpf: String): Boolean
+    fun findByEmail(email: String): AdminModel?
 }

@@ -2,6 +2,8 @@ package com.booktopia.enums
 
 enum class Errors(val code: String, val message: String) {
 
+    //Authorization
+    B000("B-000","Access Denied"),
     //Validation
     B001("B-001","Invalid Request"),
 
@@ -26,4 +28,5 @@ enum class Errors(val code: String, val message: String) {
     // Admin errors 500-599
     B501("B-501","Admin id [%s] not exists"),
     B503("B-503","Admin id [%s] isn't active"),
+
 }

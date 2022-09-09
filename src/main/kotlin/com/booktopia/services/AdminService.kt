@@ -1,7 +1,7 @@
 package com.booktopia.services
 
 import com.booktopia.enums.Errors
-import com.booktopia.enums.Profile
+import com.booktopia.enums.Role
 import com.booktopia.enums.StatusEnum
 import com.booktopia.exception.BadRequestException
 import com.booktopia.exception.NotFoundException
@@ -9,17 +9,20 @@ import com.booktopia.models.AdminModel
 import com.booktopia.repositories.AdminRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 
 
 @Service
 class AdminService(
-    val adminRepository: AdminRepository
+    private val adminRepository: AdminRepository,
+    private val bCrypt: BCryptPasswordEncoder
 ) {
 
     fun create(admin: AdminModel){
         val adminCopy = admin.copy(
-            roles = setOf(Profile.ADMIN)
+            roles = setOf(Role.ADMIN),
+            password = bCrypt.encode(admin.password)
         )
         adminRepository.save(adminCopy)
     }
