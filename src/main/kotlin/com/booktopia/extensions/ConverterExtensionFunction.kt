@@ -4,11 +4,7 @@ import com.booktopia.controllers.request.*
 import com.booktopia.controllers.response.ClientResponse
 import com.booktopia.controllers.response.RentResponse
 import com.booktopia.enums.StatusEnum
-import com.booktopia.models.AddressModel
-import com.booktopia.models.BookModel
-import com.booktopia.models.ClientModel
-import com.booktopia.models.RentModel
-import com.booktopia.services.BookService
+import com.booktopia.models.*
 import java.math.BigDecimal
 import java.time.temporal.ChronoUnit
 
@@ -32,6 +28,28 @@ fun PutClientRequest.toClientModel(previousValue: ClientModel): ClientModel{
         status = previousValue.status
     )
 }
+
+fun PostAdminRequest.toAdminModel(): AdminModel{
+    return AdminModel(
+        cpf = this.cpf,
+        name = this.name,
+        email = this.email,
+        password = this.password,
+        status = StatusEnum.ACTIVE
+    )
+}
+
+fun PutAdminRequest.toAdminModel(previousValue: AdminModel): AdminModel{
+    return AdminModel(
+        id = previousValue.id,
+        cpf = previousValue.cpf,
+        name = this.name?:previousValue.name,
+        email = this.email?:previousValue.email,
+        password = previousValue.password,
+        status = previousValue.status
+    )
+}
+
 
 fun PostAddressRequest.toAddressModel(): AddressModel{
     return AddressModel(

@@ -22,4 +22,8 @@ enum class Errors(val code: String, val message: String) {
     //Address errors 400-499
     B401("B-401","Address id [%s] not exists"),
     B403("B-403","Address id [%s] isn't active"),
+
+    // Admin errors 500-599
+    B501("B-501","Admin id [%s] not exists"),
+    B503("B-503","Admin id [%s] isn't active"),
 }
