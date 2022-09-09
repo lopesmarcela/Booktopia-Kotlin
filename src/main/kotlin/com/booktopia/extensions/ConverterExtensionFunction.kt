@@ -79,7 +79,7 @@ fun PutBookRequest.toBookModel(previousValue: BookModel): BookModel{
         author = previousValue.author,
         price = this.price?:previousValue.price,
         inventory = this.inventory?:previousValue.inventory,
-        status = this.status?:previousValue.status
+        status = previousValue.status
     )
 }
 
@@ -95,8 +95,8 @@ fun PostRentRequest.toRentModel(client: ClientModel, book: BookModel):RentModel{
 fun PutRentRequest.toRentModel(previousValue: RentModel):RentModel{
     return RentModel(
         id = previousValue.id,
-        fine = this.fine?: previousValue.fine,
-        totalValue = this.totalValue?: previousValue.totalValue,
+        fine = previousValue.fine,
+        totalValue = previousValue.totalValue,
         rentalDate = previousValue.rentalDate,
         returnDate = this.returnDate,
         client = previousValue.client,

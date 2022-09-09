@@ -5,6 +5,5 @@ import java.math.BigDecimal
 
 data class PutBookRequest (
     var price: BigDecimal?,
-    var inventory: Int?,
-    var status: StatusEnum?
+    var inventory: Int?
 )
