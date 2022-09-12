@@ -38,11 +38,26 @@ class ClientServiceTest{
 
         every { clientRepository.findAll(pageable) } returns fakeClients
 
-        val admins = clientService.findAll(pageable = pageable, name = null)
+        val clients = clientService.findAll(pageable = pageable, name = null)
 
-        assertEquals(fakeClients, admins)
+        assertEquals(fakeClients, clients)
         verify (exactly = 1){ clientRepository.findAll(pageable) }
         verify (exactly = 0){ clientRepository.findByNameContaining(any(), pageable) }
+    }
+
+    @Test
+    fun `should return clients when name is informed`(){
+        val name = UUID.randomUUID().toString()
+        val pageable: Pageable = PageRequest.of(0,5)
+        val fakeClients: Page<ClientModel> = PageImpl(listOf(buildClient(cpf = "547.616.951-29"), buildClient(cpf = "176.764.563-55")))
+
+        every { clientRepository.findByNameContaining(name, pageable) } returns fakeClients
+
+        val clients = clientService.findAll(pageable = pageable, name = name)
+
+        assertEquals(fakeClients, clients)
+        verify (exactly = 0){ clientRepository.findAll(pageable) }
+        verify (exactly = 1){ clientRepository.findByNameContaining(name, pageable) }
     }
 
     fun buildClient(

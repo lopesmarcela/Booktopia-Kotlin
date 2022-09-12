@@ -18,6 +18,7 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import java.math.BigDecimal
 import java.time.LocalDate
+import java.util.*
 import kotlin.random.Random
 
 @ExtendWith(MockKExtension::class)
@@ -40,6 +41,21 @@ class BookServiceTest{
         assertEquals(fakeAddresses, addresses)
         verify (exactly = 1){ bookRepository.findAll(pageable) }
         verify (exactly = 0){ bookRepository.findByTitleContaining(any(), pageable) }
+    }
+
+    @Test
+    fun `should return clients when name is informed`(){
+        val title = UUID.randomUUID().toString()
+        val pageable: Pageable = PageRequest.of(0,5)
+        val fakeAddresses = PageImpl(listOf(buildBook(), buildBook()))
+
+        every { bookRepository.findByTitleContaining(title,pageable) } returns fakeAddresses
+
+        val addresses = bookService.findAll(title,pageable)
+
+        assertEquals(fakeAddresses, addresses)
+        verify (exactly = 0){ bookRepository.findAll(pageable) }
+        verify (exactly = 1){ bookRepository.findByTitleContaining(title, pageable) }
     }
 
     fun buildBook(
