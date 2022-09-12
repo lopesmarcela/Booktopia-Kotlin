@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    plataform: postgres
+    url: jdbc:postgresql://localhost:5432/booktopia
+    username: postgres
+    password: ml123456
