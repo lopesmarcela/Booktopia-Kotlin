@@ -17,7 +17,7 @@ import javax.validation.Valid
 
 @RestController
 @Api(value = "", tags = ["Address"])
-@RequestMapping("address")
+@RequestMapping("adresses")
 class AddressController(
     private val addressService: AddressService
 ) {

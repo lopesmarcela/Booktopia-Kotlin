@@ -31,6 +31,14 @@ class SecurityConfig(
     private val customEntryPoint: CustomAuthenticationEntryPoint
 ): WebSecurityConfigurerAdapter() {
 
+    private val PUBLIC_GET_MATCHERS = arrayOf(
+        "/books"
+    )
+
+    private val PUBLIC_POST_MATCHERS = arrayOf(
+        "/admin"
+    )
+
     private val ADMIN_MATCHERS = arrayOf(
         "/admin/**"
     )
@@ -42,7 +50,8 @@ class SecurityConfig(
     override fun configure(http: HttpSecurity) {
         http.cors().and().csrf().disable()
         http.authorizeRequests()
-            .antMatchers(HttpMethod.POST, "/admin").permitAll()
+            .antMatchers(HttpMethod.POST, *PUBLIC_POST_MATCHERS).permitAll()
+            .antMatchers(HttpMethod.GET, *PUBLIC_GET_MATCHERS).permitAll()
             .antMatchers(*ADMIN_MATCHERS).hasAuthority(Role.ADMIN.description)
             .anyRequest().authenticated()
         http.addFilter(AuthenticationFilter(authenticationManager(), adminRepository, jwtUtil))
@@ -67,7 +76,7 @@ class SecurityConfig(
         val source = UrlBasedCorsConfigurationSource()
         val config = CorsConfiguration()
         config.allowCredentials = true
-        config.addAllowedOrigin("*")
+        config.addAllowedOriginPattern("*")
         config.addAllowedHeader("*")
         config.addAllowedMethod("*")
         source.registerCorsConfiguration("/**", config)

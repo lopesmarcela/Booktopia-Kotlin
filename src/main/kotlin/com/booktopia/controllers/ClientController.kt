@@ -19,7 +19,7 @@ import javax.validation.Valid
 
 @RestController
 @Api(value = "", tags = ["Client"])
-@RequestMapping("client")
+@RequestMapping("clients")
 class ClientController(
     private val clientService: ClientService,
     private val addressService: AddressService

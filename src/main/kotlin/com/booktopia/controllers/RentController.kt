@@ -20,7 +20,7 @@ import javax.validation.Valid
 
 @RestController
 @Api(value = "", tags = ["Rent"])
-@RequestMapping("rent")
+@RequestMapping("rents")
 class RentController(
     private val rentService: RentService,
     private val clientService: ClientService,
