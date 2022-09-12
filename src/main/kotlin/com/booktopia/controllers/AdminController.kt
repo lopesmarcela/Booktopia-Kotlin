@@ -19,7 +19,7 @@ import javax.validation.Valid
 @Api(value = "", tags = ["Admin"])
 @RequestMapping("admin")
 class AdminController(
-    val adminService: AdminService
+    private val adminService: AdminService
 ) {
 
     @PostMapping

@@ -21,8 +21,8 @@ import javax.validation.Valid
 @Api(value = "", tags = ["Client"])
 @RequestMapping("client")
 class ClientController(
-    val clientService: ClientService,
-    val addressService: AddressService
+    private val clientService: ClientService,
+    private val addressService: AddressService
 ) {
 
     @PostMapping

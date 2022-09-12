@@ -6,7 +6,7 @@ import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
-class UserCustomDetails(val adminModel: AdminModel): UserDetails {
+class UserCustomDetails(private val adminModel: AdminModel): UserDetails {
     val id:Int = adminModel.id!!
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority>

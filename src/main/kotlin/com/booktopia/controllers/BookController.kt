@@ -18,7 +18,7 @@ import javax.validation.Valid
 @Api(value = "", tags = ["Book"])
 @RequestMapping("book")
 class BookController(
-    val bookService: BookService
+    private val bookService: BookService
 ) {
 
     @PostMapping

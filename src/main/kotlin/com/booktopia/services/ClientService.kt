@@ -13,8 +13,8 @@ import java.lang.Exception
 
 @Service
 class ClientService(
-    val clientRepository: ClientRepository,
-    val addressService: AddressService
+    private val clientRepository: ClientRepository,
+    private val addressService: AddressService
 ) {
 
     fun create(client: ClientModel){

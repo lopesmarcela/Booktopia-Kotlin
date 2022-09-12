@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class AddressService(
-    val addressRepository: AddressRepository
+    private val addressRepository: AddressRepository
 ) {
 
     fun create(address: AddressModel){

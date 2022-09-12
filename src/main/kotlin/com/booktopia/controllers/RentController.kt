@@ -22,9 +22,9 @@ import javax.validation.Valid
 @Api(value = "", tags = ["Rent"])
 @RequestMapping("rent")
 class RentController(
-    val rentService: RentService,
-    val clientService: ClientService,
-    val bookService: BookService
+    private val rentService: RentService,
+    private val clientService: ClientService,
+    private val bookService: BookService
 ) {
 
     @PostMapping

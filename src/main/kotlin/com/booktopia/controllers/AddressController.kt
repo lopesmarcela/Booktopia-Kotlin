@@ -19,7 +19,7 @@ import javax.validation.Valid
 @Api(value = "", tags = ["Address"])
 @RequestMapping("address")
 class AddressController(
-    val addressService: AddressService
+    private val addressService: AddressService
 ) {
 
     @PostMapping(consumes = arrayOf("application/json"), produces= arrayOf("application/json"))

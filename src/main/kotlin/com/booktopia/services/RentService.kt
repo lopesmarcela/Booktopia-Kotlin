@@ -18,9 +18,9 @@ import kotlin.Exception
 
 @Service
 class RentService(
-    val rentRepository: RentRepository,
-    val bookService: BookService,
-    val clientService: ClientService
+    private val rentRepository: RentRepository,
+    private val bookService: BookService,
+    private val clientService: ClientService
 ) {
 
     fun create(rent: RentModel){
