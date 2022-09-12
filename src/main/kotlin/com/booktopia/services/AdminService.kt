@@ -27,8 +27,8 @@ class AdminService(
         adminRepository.save(adminCopy)
     }
 
-    fun findAll( pageable: Pageable): Page<AdminModel> {
-        return adminRepository.findAll(pageable!!)
+    fun findAll(pageable: Pageable): Page<AdminModel> {
+        return adminRepository.findAll(pageable)
     }
 
     fun findById(id: Int): AdminModel{
@@ -40,19 +40,11 @@ class AdminService(
     }
 
     fun delete(id: Int){
-        var admin = findById(id)
+        val admin = findById(id)
         if (admin.status == StatusEnum.INACTIVE){
             throw BadRequestException(Errors.B503.message.format(id), Errors.B503.code)
         }
         admin.status = StatusEnum.INACTIVE
         update(admin)
-    }
-
-    fun emailAvailable(email: String): Boolean {
-        return !adminRepository.existsByEmail(email)
-    }
-
-    fun cpfAvailable(cpf: String): Boolean {
-        return !adminRepository.existsByCpf(cpf)
     }
 }

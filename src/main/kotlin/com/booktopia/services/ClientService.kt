@@ -9,7 +9,6 @@ import com.booktopia.repositories.ClientRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
-import java.lang.Exception
 
 @Service
 class ClientService(
@@ -18,7 +17,7 @@ class ClientService(
 ) {
 
     fun create(client: ClientModel){
-        var address = addressService.findById(client.address!!.id!!)
+        val address = addressService.findById(client.address!!.id!!)
         if( address.status == StatusEnum.INACTIVE)
             throw BadRequestException(Errors.B403.message.format(address.id), Errors.B403.code)
         clientRepository.save(client)
@@ -28,7 +27,7 @@ class ClientService(
         name?.let {
             return clientRepository.findByNameContaining(it, pageable)
         }
-        return clientRepository.findAll(pageable!!)
+        return clientRepository.findAll(pageable)
     }
 
     fun findById(id: Int): ClientModel{
@@ -44,14 +43,14 @@ class ClientService(
     }
 
     fun delete(id: Int){
-        var client = findById(id)
+        val client = findById(id)
         if (client.status == StatusEnum.INACTIVE){
             throw BadRequestException(Errors.B103.message.format(id), Errors.B103.code)
         }
         client.status = StatusEnum.INACTIVE
 
         //disabling customer address
-        var address = addressService.findById(client.address!!.id!!)
+        val address = addressService.findById(client.address!!.id!!)
         addressService.delete(address.id!!)
 
         update(client)
