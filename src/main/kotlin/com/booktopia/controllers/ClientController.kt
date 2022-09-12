@@ -3,14 +3,15 @@ package com.booktopia.controllers
 import com.booktopia.controllers.request.PostClientRequest
 import com.booktopia.controllers.request.PutClientRequest
 import com.booktopia.controllers.response.ClientResponse
+import com.booktopia.controllers.response.PageResponse
 import com.booktopia.extensions.toClientModel
+import com.booktopia.extensions.toPageResponse
 import com.booktopia.extensions.toResponse
 import com.booktopia.models.ClientModel
 import com.booktopia.services.AddressService
 import com.booktopia.services.ClientService
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
-import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
@@ -35,8 +36,8 @@ class ClientController(
 
     @GetMapping
     @ApiOperation(value = "Returns a list of clients")
-    fun findAll(@RequestParam name: String?, @PageableDefault(page = 0, size = 5) pageable: Pageable): Page<ClientResponse> =
-        clientService.findAll(name, pageable).map { it.toResponse() }
+    fun findAll(@RequestParam name: String?, @PageableDefault(page = 0, size = 5) pageable: Pageable): PageResponse<ClientResponse> =
+        clientService.findAll(name, pageable).map { it.toResponse() }.toPageResponse()
 
     @GetMapping("/{id}")
     @ApiOperation(value = "Details a client")

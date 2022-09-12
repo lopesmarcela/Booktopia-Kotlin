@@ -3,16 +3,17 @@ package com.booktopia.controllers
 import com.booktopia.controllers.request.PostBookRequest
 import com.booktopia.controllers.request.PutBookRequest
 import com.booktopia.extensions.toBookModel
+import com.booktopia.extensions.toPageResponse
 import com.booktopia.models.BookModel
 import com.booktopia.services.BookService
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
-import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
+import com.booktopia.controllers.response.PageResponse
 
 @RestController
 @Api(value = "", tags = ["Book"])
@@ -30,8 +31,8 @@ class BookController(
 
     @GetMapping
     @ApiOperation(value = "Returns a list of books")
-    fun findAll(@RequestParam title: String?, @PageableDefault(page = 0, size = 5) pageable: Pageable): Page<BookModel> =
-        bookService.findAll(title, pageable)
+    fun findAll(@RequestParam title: String?, @PageableDefault(page = 0, size = 5) pageable: Pageable): PageResponse<BookModel> =
+        bookService.findAll(title, pageable).toPageResponse()
 
     @GetMapping("/{id}")
     @ApiOperation(value = "Returns a book by id")

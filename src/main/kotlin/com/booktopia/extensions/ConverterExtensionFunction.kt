@@ -3,9 +3,11 @@ package com.booktopia.extensions
 import com.booktopia.controllers.request.*
 import com.booktopia.controllers.response.AdminResponse
 import com.booktopia.controllers.response.ClientResponse
+import com.booktopia.controllers.response.PageResponse
 import com.booktopia.controllers.response.RentResponse
 import com.booktopia.enums.StatusEnum
 import com.booktopia.models.*
+import org.springframework.data.domain.Page
 import java.math.BigDecimal
 import java.time.temporal.ChronoUnit
 
@@ -165,4 +167,13 @@ fun RentModel.calculateFine(rent: RentModel): BigDecimal{
     var fineDays: Int =  totalDays.toInt() - 10
 
     return if(fineDays > 0 ) (fineDays * 1.00).toBigDecimal() else 0.0.toBigDecimal()
+}
+
+fun <T>Page<T>.toPageResponse():PageResponse<T>{
+    return PageResponse(
+        this.content,
+        this.number,
+        this.totalElements,
+        this.totalPages
+    )
 }

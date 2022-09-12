@@ -3,12 +3,13 @@ package com.booktopia.controllers
 import com.booktopia.controllers.request.PostAdminRequest
 import com.booktopia.controllers.request.PutAdminRequest
 import com.booktopia.controllers.response.AdminResponse
+import com.booktopia.controllers.response.PageResponse
 import com.booktopia.extensions.toAdminModel
+import com.booktopia.extensions.toPageResponse
 import com.booktopia.extensions.toResponse
 import com.booktopia.services.AdminService
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
-import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
@@ -31,8 +32,8 @@ class AdminController(
 
     @GetMapping
     @ApiOperation(value = "Returns a list of admins")
-    fun findAll( @PageableDefault(page = 0, size = 5) pageable: Pageable): Page<AdminResponse> =
-        adminService.findAll(pageable).map { it.toResponse() }
+    fun findAll( @PageableDefault(page = 0, size = 5) pageable: Pageable): PageResponse<AdminResponse> =
+        adminService.findAll(pageable).map { it.toResponse() }.toPageResponse()
 
     @GetMapping("/{id}")
     @ApiOperation(value = "Returns a admin by id")

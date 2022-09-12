@@ -2,7 +2,9 @@ package com.booktopia.controllers
 
 import com.booktopia.controllers.request.PostRentRequest
 import com.booktopia.controllers.request.PutRentRequest
+import com.booktopia.controllers.response.PageResponse
 import com.booktopia.controllers.response.RentResponse
+import com.booktopia.extensions.toPageResponse
 import com.booktopia.extensions.toRentModel
 import com.booktopia.extensions.toResponse
 import com.booktopia.models.RentModel
@@ -11,7 +13,6 @@ import com.booktopia.services.ClientService
 import com.booktopia.services.RentService
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
-import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
@@ -38,8 +39,8 @@ class RentController(
 
     @GetMapping
     @ApiOperation(value = "Returns a list of rents")
-    fun findAll(@PageableDefault(page = 0, size = 5) pageable: Pageable): Page<RentResponse> =
-        rentService.findAll(pageable).map { it.toResponse() }
+    fun findAll(@PageableDefault(page = 0, size = 5) pageable: Pageable): PageResponse<RentResponse> =
+        rentService.findAll(pageable).map { it.toResponse() }.toPageResponse()
 
     @GetMapping("/{id}")
     @ApiOperation(value = "Details a rent")

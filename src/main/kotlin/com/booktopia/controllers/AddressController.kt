@@ -2,13 +2,13 @@ package com.booktopia.controllers
 
 import com.booktopia.controllers.request.PostAddressRequest
 import com.booktopia.controllers.request.PutAddressRequest
+import com.booktopia.controllers.response.PageResponse
 import com.booktopia.extensions.toAddressModel
+import com.booktopia.extensions.toPageResponse
 import com.booktopia.models.AddressModel
 import com.booktopia.services.AddressService
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
-import io.swagger.annotations.Tag
-import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
@@ -30,8 +30,8 @@ class AddressController(
 
     @GetMapping(produces= arrayOf("application/json"))
     @ApiOperation(value = "Returns a list of addresses")
-    fun findAll(@PageableDefault(page = 0, size = 5) pageable: Pageable):Page<AddressModel> =
-        addressService.findAll(pageable)
+    fun findAll(@PageableDefault(page = 0, size = 5) pageable: Pageable):PageResponse<AddressModel> =
+        addressService.findAll(pageable).toPageResponse()
 
     @GetMapping("/{id}", produces = arrayOf("application/json"))
     @ApiOperation(value = "Returns an address by id")
