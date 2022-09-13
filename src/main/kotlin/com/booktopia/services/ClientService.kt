@@ -42,9 +42,7 @@ class ClientService(
 
     fun delete(id: Int){
         val client = findById(id)
-        if (client.status == StatusEnum.INACTIVE){
-            throw BadRequestException(Errors.B103.message.format(id), Errors.B103.code)
-        }
+        findClientInactive(id)
         client.status = StatusEnum.INACTIVE
 
         //disabling customer address

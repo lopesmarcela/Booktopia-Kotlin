@@ -36,9 +36,7 @@ class BookService(
 
     fun delete(id: Int){
         var book = findById(id)
-        if (book.status == StatusEnum.INACTIVE){
-            throw BadRequestException(Errors.B203.message.format(id), Errors.B203.code)
-        }
+        findBookInactive(id)
         book.status = StatusEnum.INACTIVE
         update(book)
     }

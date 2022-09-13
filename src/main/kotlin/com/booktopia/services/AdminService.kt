@@ -41,10 +41,15 @@ class AdminService(
 
     fun delete(id: Int){
         val admin = findById(id)
+        findAdminInactive(id)
+        admin.status = StatusEnum.INACTIVE
+        update(admin)
+    }
+
+    fun findAdminInactive(id: Int){
+        val admin = findById(id)
         if (admin.status == StatusEnum.INACTIVE){
             throw BadRequestException(Errors.B503.message.format(id), Errors.B503.code)
         }
-        admin.status = StatusEnum.INACTIVE
-        update(admin)
     }
 }

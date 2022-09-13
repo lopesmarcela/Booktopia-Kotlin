@@ -33,9 +33,7 @@ class AddressService(
 
     fun delete(id: Int){
         val address = findById(id)
-        if (address.status == StatusEnum.INACTIVE){
-            throw BadRequestException(Errors.B403.message.format(id), Errors.B403.code)
-        }
+        findAddressInactive(id)
         address.status = StatusEnum.INACTIVE
         update(address)
     }
