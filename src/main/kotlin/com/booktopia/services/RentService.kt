@@ -24,21 +24,14 @@ class RentService(
 ) {
 
     fun create(rent: RentModel){
-        var book = bookService.findById(rent.book!!.id!!)
-        var client = clientService.findById(rent.client!!.id!!)
-        if(book.status == StatusEnum.INACTIVE){
-            throw BadRequestException(Errors.B302.message.format(book.id), Errors.B302.code)
-        }
-        if(client.status == StatusEnum.INACTIVE){
-            throw BadRequestException(Errors.B303.message.format(book.id), Errors.B303.code)
-        }
-        //decreasing 1 book in stock
-        book.inventory-= 1
-        //deactivating book if there is no stock
-        if(book.inventory == 0){
-            bookService.delete(book.id!!)
-        }
-        bookService.update(book)
+        val book = bookService.findById(rent.book!!.id!!)
+        val client = clientService.findById(rent.client!!.id!!)
+
+        bookService.findBookInactive(book.id!!)
+        clientService.findClientInactive(client.id!!)
+
+        bookService.decreasesStock(book)
+
         rentRepository.save(rent)
     }
 
@@ -56,10 +49,10 @@ class RentService(
         var book: BookModel = bookService.findById(rent.book!!.id!!)
         rent.totalValue = rent.fine!! + book.price
 
-        book.inventory += 1
-        book.status = if (book.inventory > 0) StatusEnum.ACTIVE else StatusEnum.INACTIVE
+        bookService.increasesStock(book)
 
-        bookService.update(book)
         rentRepository.save(rent)
     }
+
+
 }

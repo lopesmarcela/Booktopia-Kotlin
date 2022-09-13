@@ -58,6 +58,18 @@ class BookServiceTest{
         verify (exactly = 1){ bookRepository.findByTitleContaining(title, pageable) }
     }
 
+    @Test
+    fun `should create book`(){
+        val book = buildBook()
+
+        every { bookRepository.save(book) } returns book
+
+        bookService.create(book)
+
+        verify (exactly = 1){ bookRepository.save(book) }
+    }
+
+
     fun buildBook(
         id:Int?=null,
         title:String = RandomString(30).toString(),

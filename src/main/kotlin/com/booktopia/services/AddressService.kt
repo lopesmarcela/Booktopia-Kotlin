@@ -39,4 +39,10 @@ class AddressService(
         address.status = StatusEnum.INACTIVE
         update(address)
     }
+
+    fun findAddressInactive(id: Int){
+        val address = findById(id)
+        if( address.status == StatusEnum.INACTIVE)
+            throw BadRequestException(Errors.B403.message.format(address.id), Errors.B403.code)
+    }
 }

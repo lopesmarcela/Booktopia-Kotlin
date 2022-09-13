@@ -1,16 +1,22 @@
 package com.booktopia.services
 
+import com.booktopia.enums.Errors
 import com.booktopia.enums.StatusEnum
+import com.booktopia.exception.BadRequestException
+import com.booktopia.models.AddressModel
 import com.booktopia.models.ClientModel
 import com.booktopia.repositories.ClientRepository
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
+import io.mockk.just
+import io.mockk.runs
 import io.mockk.verify
 import net.bytebuddy.utility.RandomString
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
@@ -60,8 +66,22 @@ class ClientServiceTest{
         verify (exactly = 1){ clientRepository.findByNameContaining(name, pageable) }
     }
 
+    @Test
+    fun `should create client`(){
+        val client = buildClient(cpf = "064.687.863-80")
+
+        every { addressService.findAddressInactive(client.address!!.id!!) } just runs
+        every { clientRepository.save(client) } returns client
+
+
+        clientService.create(client)
+
+        verify (exactly = 1){ clientRepository.save(client) }
+        verify (exactly = 1){ addressService.findAddressInactive(client.address!!.id!!) }
+    }
+
     fun buildClient(
-        id: Int? = null,
+        id: Int = Random().nextInt(),
         cpf: String,
         name: String = RandomString(10).toString(),
         email:String = "${UUID.randomUUID()}@gmail.com",
@@ -70,6 +90,14 @@ class ClientServiceTest{
         cpf = cpf,
         name = name,
         email= email,
-        status = StatusEnum.ACTIVE
+        status = StatusEnum.ACTIVE,
+        address = AddressModel(
+            id = 1,
+            street = "",
+            number = 1,
+            district = "",
+            city = "",
+            cep = ""
+        )
     )
 }

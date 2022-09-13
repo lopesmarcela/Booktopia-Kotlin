@@ -17,9 +17,7 @@ class ClientService(
 ) {
 
     fun create(client: ClientModel){
-        val address = addressService.findById(client.address!!.id!!)
-        if( address.status == StatusEnum.INACTIVE)
-            throw BadRequestException(Errors.B403.message.format(address.id), Errors.B403.code)
+        addressService.findAddressInactive(client.address!!.id!!)
         clientRepository.save(client)
     }
 
@@ -62,5 +60,12 @@ class ClientService(
 
     fun cpfAvailable(cpf: String): Boolean {
         return !clientRepository.existsByCpf(cpf)
+    }
+
+    fun findClientInactive(int: Int){
+        val client = findById(int)
+        if(client.status == StatusEnum.INACTIVE){
+            throw BadRequestException(Errors.B303.message.format(client.id), Errors.B303.code)
+        }
     }
 }

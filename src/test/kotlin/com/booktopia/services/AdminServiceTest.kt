@@ -46,6 +46,22 @@ class AdminServiceTest{
         verify (exactly = 1){ adminRepository.findAll(pageable) }
     }
 
+    @Test
+    fun `should create admin and encrypt password`(){
+        val initialPassword = Math.random().toString()
+        val fakeAdmin = buildAdmin(cpf = "547.616.951-29", password = initialPassword)
+        val fakePassword = UUID.randomUUID().toString()
+        val fakeAdminEncrypted = fakeAdmin.copy(password = fakePassword)
+
+        every { adminRepository.save(fakeAdminEncrypted) } returns fakeAdmin
+        every { bCrypt.encode(initialPassword) } returns fakePassword
+
+        adminService.create(fakeAdmin)
+
+        verify (exactly = 1){ adminRepository.save(fakeAdminEncrypted) }
+        verify (exactly = 1){ bCrypt.encode(initialPassword) }
+    }
+
     fun buildAdmin(
         id: Int? = null,
         cpf: String,

@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
+import java.util.*
 import kotlin.random.Random
 
 @ExtendWith(MockKExtension::class)
@@ -37,6 +38,18 @@ class AddressServiceTest{
         assertEquals(fakeAddresses, addresses)
         verify (exactly = 1){ addressRepository.findAll(pageable) }
     }
+
+    @Test
+    fun `should create address`(){
+        val fakeAddress = buildAddress()
+
+        every { addressRepository.save(fakeAddress) } returns fakeAddress
+
+        addressService.create(fakeAddress)
+
+        verify (exactly = 1){ addressRepository.save(fakeAddress) }
+    }
+
     fun buildAddress(
         id: Int? = Random.nextInt(),
         street: String = RandomString(50).toString(),

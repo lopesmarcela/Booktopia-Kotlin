@@ -42,4 +42,25 @@ class BookService(
         book.status = StatusEnum.INACTIVE
         update(book)
     }
+
+    fun findBookInactive(id:Int){
+        val book = findById(id)
+        if(book.status == StatusEnum.INACTIVE)
+            throw BadRequestException(Errors.B302.message.format(book.id), Errors.B302.code)
+    }
+
+    fun decreasesStock(book: BookModel) {
+        book.inventory -= 1
+        if (book.inventory == 0) {
+            delete(book.id!!)
+        }
+        update(book)
+    }
+
+    fun increasesStock(book: BookModel) {
+        book.inventory += 1
+        book.status = if (book.inventory > 0) StatusEnum.ACTIVE else StatusEnum.INACTIVE
+        update(book)
+    }
+
 }
