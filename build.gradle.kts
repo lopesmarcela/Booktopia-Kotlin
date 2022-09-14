@@ -1,5 +1,9 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+
+val mainClassName = "com.booktopia.BooktopiaApplication"
+
+
 plugins {
 	id("org.springframework.boot") version "2.5.7"
 	id("io.spring.dependency-management") version "1.0.13.RELEASE"
@@ -28,6 +32,8 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("org.flywaydb:flyway-core:7.7.0")
 	implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.2.1")
+	implementation("org.springframework.boot:spring-boot-gradle-plugin:2.7.3")
+	implementation("org.springframework.boot.experimental:spring-boot-thin-gradle-plugin:1.0.28.RELEASE")
 
 	implementation("io.springfox:springfox-swagger2:2.9.2")
 	implementation("io.springfox:springfox-swagger-ui:2.9.2")
