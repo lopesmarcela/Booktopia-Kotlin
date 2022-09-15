@@ -35,7 +35,7 @@ class BookService(
     }
 
     fun delete(id: Int){
-        var book = findById(id)
+        val book = findById(id)
         findBookInactive(id)
         book.status = StatusEnum.INACTIVE
         update(book)

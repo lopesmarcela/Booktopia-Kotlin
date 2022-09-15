@@ -9,7 +9,6 @@ import com.booktopia.security.JwtUtil
 import com.booktopia.services.UserDetailsCustomService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Profile
 import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -31,15 +30,15 @@ class SecurityConfig(
     private val customEntryPoint: CustomAuthenticationEntryPoint
 ): WebSecurityConfigurerAdapter() {
 
-    private val PUBLIC_GET_MATCHERS = arrayOf(
+    private val publicGetMatchers = arrayOf(
         "/books"
     )
 
-    private val PUBLIC_POST_MATCHERS = arrayOf(
+    private val publicPostMatchers = arrayOf(
         "/admin"
     )
 
-    private val ADMIN_MATCHERS = arrayOf(
+    private val adminMatchers = arrayOf(
         "/admin/**"
     )
 
@@ -50,9 +49,9 @@ class SecurityConfig(
     override fun configure(http: HttpSecurity) {
         http.cors().and().csrf().disable()
         http.authorizeRequests()
-            .antMatchers(HttpMethod.POST, *PUBLIC_POST_MATCHERS).permitAll()
-            .antMatchers(HttpMethod.GET, *PUBLIC_GET_MATCHERS).permitAll()
-            .antMatchers(*ADMIN_MATCHERS).hasAuthority(Role.ADMIN.description)
+            .antMatchers(HttpMethod.POST, *publicPostMatchers).permitAll()
+            .antMatchers(HttpMethod.GET, *publicGetMatchers).permitAll()
+            .antMatchers(*adminMatchers).hasAuthority(Role.ADMIN.description)
             .anyRequest().authenticated()
         http.addFilter(AuthenticationFilter(authenticationManager(), adminRepository, jwtUtil))
         http.addFilter(AuthorizationFilter(authenticationManager(), userDetails, jwtUtil))

@@ -1,8 +1,6 @@
 package com.booktopia.services
 
 import com.booktopia.enums.Errors
-import com.booktopia.enums.StatusEnum
-import com.booktopia.exception.BadRequestException
 import com.booktopia.exception.NotFoundException
 import com.booktopia.extensions.calculateFine
 import com.booktopia.models.BookModel
@@ -11,10 +9,6 @@ import com.booktopia.repositories.RentRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
-import java.time.temporal.ChronoUnit
-import java.util.Vector
-import kotlin.Exception
 
 @Service
 class RentService(
@@ -46,7 +40,7 @@ class RentService(
     fun returnBook(rent: RentModel){
         rent.fine = rent.calculateFine(rent)
 
-        var book: BookModel = bookService.findById(rent.book!!.id!!)
+        val book: BookModel = bookService.findById(rent.book!!.id!!)
         rent.totalValue = rent.fine!! + book.price
 
         bookService.increasesStock(book)

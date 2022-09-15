@@ -2,7 +2,6 @@ package com.booktopia.models
 
 import com.booktopia.enums.StatusEnum
 import com.fasterxml.jackson.annotation.JsonAlias
-import kotlinx.datetime.LocalDateTime
 import java.math.BigDecimal
 import java.time.LocalDate
 import javax.persistence.*
