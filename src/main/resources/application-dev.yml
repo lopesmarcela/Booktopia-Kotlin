@@ -1,5 +1,5 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/booktopia
-    username: marcela
-    password: ml123456
+    username: postgres
+    password: 12345678

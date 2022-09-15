@@ -1,9 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-
-val mainClassName = "com.booktopia.BooktopiaApplication"
-
-
 plugins {
 	id("org.springframework.boot") version "2.5.7"
 	id("io.spring.dependency-management") version "1.0.13.RELEASE"
@@ -11,11 +7,16 @@ plugins {
 	kotlin("plugin.spring") version "1.6.21"
 	kotlin("plugin.jpa") version "1.6.21"
 	jacoco
+	application
 }
 
 group = "com.booktopia"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
+
+application {
+	mainClass.set("com.booktopia.BooktopiaApplication")
+}
 
 repositories {
 	mavenCentral()
