@@ -4,6 +4,7 @@ import com.booktopia.enums.CategoryEnum
 import com.booktopia.enums.Errors
 import com.booktopia.enums.StatusEnum
 import com.booktopia.exception.BadRequestException
+import com.booktopia.exception.NotFoundException
 import com.booktopia.models.BookModel
 import com.booktopia.models.ClientModel
 import com.booktopia.models.RentModel
@@ -17,6 +18,7 @@ import io.mockk.runs
 import io.mockk.verify
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
@@ -72,6 +74,34 @@ class RentServiceTest{
         verify (exactly = 1){  bookService.decreasesStock(rent.book!!) }
         verify (exactly = 1){ rentRepository.save(rent) }
     }
+
+    @Test
+    fun `should return rent by id`(){
+        val id: Int = Random().nextInt()
+        val fakeRent = buildRent(id)
+
+        every { rentRepository.findById(id) } returns Optional.of(fakeRent)
+
+        val rent = rentService.findById(id)
+
+        assertEquals(fakeRent,rent)
+        verify (exactly = 1){ rentRepository.findById(id) }
+    }
+
+    @Test
+    fun `should throw error when rent not found`(){
+        val id: Int = Random().nextInt()
+        every { rentRepository.findById(id) } returns Optional.empty()
+
+        val error = assertThrows<NotFoundException> {
+            rentService.findById(id)
+        }
+
+        assertEquals("Rent id [$id] not exists", error.message)
+        assertEquals("B-301", error.errorCode)
+        verify (exactly = 1){ rentRepository.findById(id) }
+    }
+
     fun buildRent(
         id: Int? = Random().nextInt(),
         fine: BigDecimal = Random(6).nextDouble().toBigDecimal(),

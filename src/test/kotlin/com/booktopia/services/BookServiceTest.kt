@@ -2,6 +2,7 @@ package com.booktopia.services
 
 import com.booktopia.enums.CategoryEnum
 import com.booktopia.enums.StatusEnum
+import com.booktopia.exception.NotFoundException
 import com.booktopia.models.BookModel
 import com.booktopia.repositories.BookRepository
 import io.mockk.every
@@ -12,6 +13,7 @@ import io.mockk.verify
 import net.bytebuddy.utility.RandomString
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
@@ -36,9 +38,9 @@ class BookServiceTest{
 
         every { bookRepository.findAll(pageable) } returns fakeAddresses
 
-        val addresses = bookService.findAll(null,pageable)
+        val book = bookService.findAll(null,pageable)
 
-        assertEquals(fakeAddresses, addresses)
+        assertEquals(fakeAddresses, book)
         verify (exactly = 1){ bookRepository.findAll(pageable) }
         verify (exactly = 0){ bookRepository.findByTitleContaining(any(), pageable) }
     }
@@ -69,6 +71,33 @@ class BookServiceTest{
         verify (exactly = 1){ bookRepository.save(book) }
     }
 
+    @Test
+    fun `should return book by id`(){
+        val id: Int = Random.nextInt()
+        val fakeBook = buildBook(id)
+
+        every { bookRepository.findById(id) } returns Optional.of(fakeBook)
+
+        val book = bookService.findById(id)
+
+        assertEquals(fakeBook,book)
+        verify (exactly = 1){ bookRepository.findById(id) }
+    }
+
+    @Test
+    fun `should throw error when book not found`(){
+        val id: Int = Random.nextInt()
+
+        every { bookRepository.findById(id) } returns Optional.empty()
+
+        val error = assertThrows<NotFoundException> {
+            bookService.findById(id)
+        }
+
+        assertEquals("Book id [$id] not exists", error.message)
+        assertEquals("B-201", error.errorCode)
+        verify (exactly = 1){ bookRepository.findById(id) }
+    }
 
     fun buildBook(
         id:Int?=null,

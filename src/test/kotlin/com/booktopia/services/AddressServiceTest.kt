@@ -1,6 +1,7 @@
 package com.booktopia.services
 
 import com.booktopia.enums.StatusEnum
+import com.booktopia.exception.NotFoundException
 import com.booktopia.repositories.AddressRepository
 import com.booktopia.models.AddressModel
 import io.mockk.every
@@ -48,6 +49,34 @@ class AddressServiceTest{
         addressService.create(fakeAddress)
 
         verify (exactly = 1){ addressRepository.save(fakeAddress) }
+    }
+
+    @Test
+    fun `should return address by id`(){
+        val id: Int= Random.nextInt()
+        val fakeAddress = buildAddress(id = id)
+
+        every { addressRepository.findById(id) } returns Optional.of(fakeAddress)
+
+        val address = addressService.findById(id)
+
+        assertEquals(fakeAddress, address)
+        verify (exactly = 1){ addressRepository.findById(id) }
+    }
+
+    @Test
+    fun `should throw error when address not found`(){
+        val id: Int= Random.nextInt()
+
+        every { addressRepository.findById(id) } returns Optional.empty()
+
+        val error = org.junit.jupiter.api.assertThrows<NotFoundException> {
+            addressService.findById(id)
+        }
+
+        assertEquals("Address id [$id] not exists", error.message)
+        assertEquals("B-401", error.errorCode)
+        verify (exactly = 1){ addressRepository.findById(id) }
     }
 
     fun buildAddress(

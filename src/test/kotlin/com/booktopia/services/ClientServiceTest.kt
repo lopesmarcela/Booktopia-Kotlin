@@ -3,6 +3,7 @@ package com.booktopia.services
 import com.booktopia.enums.Errors
 import com.booktopia.enums.StatusEnum
 import com.booktopia.exception.BadRequestException
+import com.booktopia.exception.NotFoundException
 import com.booktopia.models.AddressModel
 import com.booktopia.models.ClientModel
 import com.booktopia.repositories.ClientRepository
@@ -78,6 +79,33 @@ class ClientServiceTest{
 
         verify (exactly = 1){ clientRepository.save(client) }
         verify (exactly = 1){ addressService.findAddressInactive(client.address!!.id!!) }
+    }
+
+    @Test
+    fun `should return client by id`(){
+        val id: Int = kotlin.random.Random.nextInt()
+        val fakeClient = buildClient(id, "064.687.863-80")
+
+        every { clientRepository.findById(id) } returns Optional.of(fakeClient)
+
+        val client = clientService.findById(id)
+
+        assertEquals(fakeClient,client)
+        verify (exactly = 1){ clientRepository.findById(id) }
+    }
+
+    @Test
+    fun `should throw error when client not found`(){
+        val id: Int = Random().nextInt()
+        every { clientRepository.findById(id) } returns Optional.empty()
+
+        val error = assertThrows<NotFoundException> {
+            clientService.findById(id)
+        }
+
+        assertEquals("Client id [$id] not exists", error.message)
+        assertEquals("B-101", error.errorCode)
+        verify (exactly = 1){ clientRepository.findById(id) }
     }
 
     fun buildClient(

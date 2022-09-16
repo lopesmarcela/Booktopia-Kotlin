@@ -17,8 +17,6 @@ enum class Errors(val code: String, val message: String) {
 
     // Rent errors 300-399
     B301("B-301","Rent id [%s] not exists"),
-    B302("B-302","Cannot create rent, book id [%s] is inactive"),
-    B303("B-303","Cannot create rent, client id [%s] is inactive"),
     B304("B-304","Rent id [%s] has already been returned"),
 
     //Address errors 400-499

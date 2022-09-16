@@ -2,6 +2,7 @@ package com.booktopia.services
 
 import com.booktopia.enums.Role
 import com.booktopia.enums.StatusEnum
+import com.booktopia.exception.NotFoundException
 import com.booktopia.models.AdminModel
 import com.booktopia.repositories.AdminRepository
 import io.mockk.every
@@ -12,6 +13,7 @@ import io.mockk.verify
 import net.bytebuddy.utility.RandomString
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
@@ -60,6 +62,34 @@ class AdminServiceTest{
 
         verify (exactly = 1){ adminRepository.save(fakeAdminEncrypted) }
         verify (exactly = 1){ bCrypt.encode(initialPassword) }
+    }
+
+    @Test
+    fun `should return admin by id`(){
+        val id: Int = Random.nextInt()
+        val fakeAdmin = buildAdmin(id, "064.687.863-80")
+
+        every { adminRepository.findById(id) } returns Optional.of(fakeAdmin)
+
+        val admin = adminService.findById(id)
+
+        assertEquals(fakeAdmin,admin)
+        verify (exactly = 1){ adminRepository.findById(id) }
+    }
+
+    @Test
+    fun `should throw error when admin not found`(){
+        val id: Int = Random.nextInt()
+
+        every { adminRepository.findById(id) } returns Optional.empty()
+
+        val error = assertThrows<NotFoundException> {
+            adminService.findById(id)
+        }
+
+        assertEquals("Admin id [$id] not exists", error.message)
+        assertEquals("B-501", error.errorCode)
+        verify (exactly = 1){ adminRepository.findById(id) }
     }
 
     fun buildAdmin(

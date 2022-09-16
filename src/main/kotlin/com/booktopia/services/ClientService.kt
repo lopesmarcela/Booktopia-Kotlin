@@ -63,7 +63,7 @@ class ClientService(
     fun findClientInactive(int: Int){
         val client = findById(int)
         if(client.status == StatusEnum.INACTIVE){
-            throw BadRequestException(Errors.B303.message.format(client.id), Errors.B303.code)
+            throw BadRequestException(Errors.B103.message.format(client.id), Errors.B103.code)
         }
     }
 }
