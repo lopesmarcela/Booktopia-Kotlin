@@ -144,7 +144,7 @@ class ClientServiceTest{
     }
 
     @Test
-    fun `should delete admin`(){
+    fun `should delete client`(){
         val id: Int = Random().nextInt()
         val fakeClient = buildClient(id,"064.687.863-80")
 
@@ -163,7 +163,7 @@ class ClientServiceTest{
     }
 
     @Test
-    fun `should throw not found when delete admin`(){
+    fun `should throw not found when delete client`(){
         val id: Int = Random().nextInt()
 
         every { clientService.findById(id) } throws NotFoundException(Errors.B101.message.format(id), Errors.B101.code)
@@ -176,6 +176,36 @@ class ClientServiceTest{
 
         verify (exactly = 1){ clientService.findById(id) }
         verify (exactly = 0){ clientService.update(any()) }
+    }
+
+    @Test
+    fun `should return false when email unavailable`(){
+        val email = "${Random().nextInt()}@email.com"
+        every { clientRepository.existsByEmail(email) } returns true
+        val emailAvailable = clientService.emailAvailable(email)
+        assertFalse(emailAvailable)
+        verify (exactly = 1){ clientRepository.existsByEmail(email) }
+    }
+
+    @Test
+    fun `should return false when cpf unavailable`(){
+        val cpf = "097.764.785-86"
+        every { clientRepository.existsByCpf(cpf) } returns true
+        val cpfAvailable = clientService.cpfAvailable(cpf)
+        assertFalse(cpfAvailable)
+        verify (exactly = 1){ clientRepository.existsByCpf(cpf) }
+    }
+
+    @Test
+    fun `should return all client with status active`(){
+        val fakeClients = listOf(buildClient(cpf = "547.616.951-29"), buildClient(cpf = "176.764.563-55"))
+
+        every { clientRepository.findByStatus(StatusEnum.ACTIVE) } returns fakeClients
+
+        val clients = clientService.findByActive()
+
+        assertEquals(fakeClients,clients)
+        verify (exactly = 1){ clientRepository.findByStatus(StatusEnum.ACTIVE) }
     }
 
     fun buildClient(

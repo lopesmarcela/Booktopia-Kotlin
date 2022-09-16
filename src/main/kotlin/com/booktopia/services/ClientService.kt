@@ -63,8 +63,8 @@ class ClientService(
         return !clientRepository.existsByCpf(cpf)
     }
 
-    fun findClientInactive(int: Int){
-        val client = findById(int)
+    fun findClientInactive(id: Int){
+        val client = findById(id)
         if(client.status == StatusEnum.INACTIVE){
             throw BadRequestException(Errors.B103.message.format(client.id), Errors.B103.code)
         }
