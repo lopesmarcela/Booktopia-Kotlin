@@ -78,7 +78,7 @@ class AdminServiceTest{
     }
 
     @Test
-    fun `should throw error when admin not found`(){
+    fun `should throw not found when find by id`(){
         val id: Int = Random.nextInt()
 
         every { adminRepository.findById(id) } returns Optional.empty()
@@ -90,6 +90,39 @@ class AdminServiceTest{
         assertEquals("Admin id [$id] not exists", error.message)
         assertEquals("B-501", error.errorCode)
         verify (exactly = 1){ adminRepository.findById(id) }
+    }
+
+    @Test
+    fun`should update admin`(){
+        val id: Int= Random.nextInt()
+        val fakeAdmin = buildAdmin(id, "064,687,863-80")
+
+        every { adminRepository.existsById(id) } returns true
+        every { adminRepository.save(fakeAdmin) } returns fakeAdmin
+
+        adminService.update(fakeAdmin)
+
+        verify (exactly = 1){ adminRepository.existsById(id) }
+        verify (exactly = 1){ adminRepository.save(fakeAdmin)  }
+    }
+
+    @Test
+    fun`should throw not found when update admin`(){
+        val id: Int= Random.nextInt()
+        val fakeAdmin = buildAdmin(id, "064,687,863-80")
+
+        every { adminRepository.existsById(id) } returns false
+        every { adminRepository.save(fakeAdmin) } returns fakeAdmin
+
+        val error = assertThrows<NotFoundException> {
+            adminService.update(fakeAdmin)
+        }
+
+        assertEquals("Admin id [$id] not exists", error.message)
+        assertEquals("B-501", error.errorCode)
+
+        verify (exactly = 1){ adminRepository.existsById(id) }
+        verify (exactly = 0){ adminRepository.save(any())  }
     }
 
     fun buildAdmin(

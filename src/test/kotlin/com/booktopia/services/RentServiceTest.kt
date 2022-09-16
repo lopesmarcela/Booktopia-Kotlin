@@ -89,7 +89,7 @@ class RentServiceTest{
     }
 
     @Test
-    fun `should throw error when rent not found`(){
+    fun `should throw not found when find by id`(){
         val id: Int = Random().nextInt()
         every { rentRepository.findById(id) } returns Optional.empty()
 
@@ -100,6 +100,47 @@ class RentServiceTest{
         assertEquals("Rent id [$id] not exists", error.message)
         assertEquals("B-301", error.errorCode)
         verify (exactly = 1){ rentRepository.findById(id) }
+    }
+
+    @Test
+    fun`should return rent`(){
+        val id: Int= Random().nextInt()
+        val fakeRent = buildRent(id)
+
+        every { rentRepository.existsById(id) } returns true
+        every { bookService.increasesStock(fakeRent.book!!)} just runs
+        every { bookService.findById(fakeRent.book!!.id!!) } returns fakeRent.book!!
+        every { rentRepository.save(fakeRent) } returns fakeRent
+
+        rentService.returnBook(fakeRent)
+
+        verify (exactly = 1){ rentRepository.existsById(id) }
+        verify (exactly = 1){ bookService.increasesStock(fakeRent.book!!) }
+        verify (exactly = 1){ bookService.findById(fakeRent.book!!.id!!) }
+        verify (exactly = 1){ rentRepository.save(fakeRent)  }
+    }
+
+    @Test
+    fun`should throw not found when return rent`(){
+        val id: Int= Random().nextInt()
+        val fakeRent = buildRent(id)
+
+        every { rentRepository.existsById(id) } returns false
+        every { bookService.increasesStock(fakeRent.book!!)} just runs
+        every { bookService.findById(fakeRent.book!!.id!!) } returns fakeRent.book!!
+        every { rentRepository.save(fakeRent) } returns fakeRent
+
+        val error = assertThrows<NotFoundException> {
+            rentService.returnBook(fakeRent)
+        }
+
+        assertEquals("Rent id [$id] not exists", error.message)
+        assertEquals("B-301", error.errorCode)
+
+        verify (exactly = 1){ rentRepository.existsById(id) }
+        verify (exactly = 0){ bookService.increasesStock(fakeRent.book!!) }
+        verify (exactly = 0){ bookService.findById(fakeRent.book!!.id!!) }
+        verify (exactly = 0){ rentRepository.save(fakeRent)  }
     }
 
     fun buildRent(

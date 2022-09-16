@@ -85,7 +85,7 @@ class BookServiceTest{
     }
 
     @Test
-    fun `should throw error when book not found`(){
+    fun `should throw not found when find by id`(){
         val id: Int = Random.nextInt()
 
         every { bookRepository.findById(id) } returns Optional.empty()
@@ -97,6 +97,39 @@ class BookServiceTest{
         assertEquals("Book id [$id] not exists", error.message)
         assertEquals("B-201", error.errorCode)
         verify (exactly = 1){ bookRepository.findById(id) }
+    }
+
+    @Test
+    fun`should update book`(){
+        val id: Int= Random.nextInt()
+        val fakeBook = buildBook(id)
+
+        every { bookRepository.existsById(id) } returns true
+        every { bookRepository.save(fakeBook) } returns fakeBook
+
+        bookService.update(fakeBook)
+
+        verify (exactly = 1){ bookRepository.existsById(id) }
+        verify (exactly = 1){ bookRepository.save(fakeBook)  }
+    }
+
+    @Test
+    fun`should throw not found when update book`(){
+        val id: Int= Random.nextInt()
+        val fakeBook = buildBook(id)
+
+        every { bookRepository.existsById(id) } returns false
+        every { bookRepository.save(fakeBook) } returns fakeBook
+
+        val error = assertThrows<NotFoundException> {
+            bookService.update(fakeBook)
+        }
+
+        assertEquals("Book id [$id] not exists", error.message)
+        assertEquals("B-201", error.errorCode)
+
+        verify (exactly = 1){ bookRepository.existsById(id) }
+        verify (exactly = 0){ bookRepository.save(any())  }
     }
 
     fun buildBook(

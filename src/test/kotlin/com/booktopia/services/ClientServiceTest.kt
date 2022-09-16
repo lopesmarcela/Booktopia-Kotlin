@@ -95,7 +95,7 @@ class ClientServiceTest{
     }
 
     @Test
-    fun `should throw error when client not found`(){
+    fun `should throw not found when find by id`(){
         val id: Int = Random().nextInt()
         every { clientRepository.findById(id) } returns Optional.empty()
 
@@ -106,6 +106,39 @@ class ClientServiceTest{
         assertEquals("Client id [$id] not exists", error.message)
         assertEquals("B-101", error.errorCode)
         verify (exactly = 1){ clientRepository.findById(id) }
+    }
+
+    @Test
+    fun`should update client`(){
+        val id: Int= kotlin.random.Random.nextInt()
+        val fakeClient = buildClient(id, "064,687,863-80")
+
+        every { clientRepository.existsById(id) } returns true
+        every { clientRepository.save(fakeClient) } returns fakeClient
+
+        clientService.update(fakeClient)
+
+        verify (exactly = 1){ clientRepository.existsById(id) }
+        verify (exactly = 1){ clientRepository.save(fakeClient)  }
+    }
+
+    @Test
+    fun`should throw not found when update client`(){
+        val id: Int= kotlin.random.Random.nextInt()
+        val fakeClient = buildClient(id, "064,687,863-80")
+
+        every { clientRepository.existsById(id) } returns false
+        every { clientRepository.save(fakeClient) } returns fakeClient
+
+        val error = assertThrows<NotFoundException> {
+            clientService.update(fakeClient)
+        }
+
+        assertEquals("Client id [$id] not exists", error.message)
+        assertEquals("B-101", error.errorCode)
+
+        verify (exactly = 1){ clientRepository.existsById(id) }
+        verify (exactly = 0){ clientRepository.save(any())  }
     }
 
     fun buildClient(
