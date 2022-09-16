@@ -17,7 +17,6 @@ enum class Errors(val code: String, val message: String) {
 
     // Rent errors 300-399
     B301("B-301","Rent id [%s] not exists"),
-    B304("B-304","Rent id [%s] has already been returned"),
 
     //Address errors 400-499
     B401("B-401","Address id [%s] not exists"),

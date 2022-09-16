@@ -42,9 +42,6 @@ class RentService(
         if (!rentRepository.existsById(rent.id!!)){
             throw NotFoundException(Errors.B301.message.format(rent.id!!), Errors.B301.code)
         }
-        if (rent.returnDate != null){
-            throw BadRequestException(Errors.B304.message.format(rent.id!!), Errors.B304.code)
-        }
         rent.fine = rent.calculateFine(rent)
 
         val book: BookModel = bookService.findById(rent.book!!.id!!)
