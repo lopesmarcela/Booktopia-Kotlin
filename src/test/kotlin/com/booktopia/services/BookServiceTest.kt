@@ -1,6 +1,7 @@
 package com.booktopia.services
 
 import com.booktopia.enums.CategoryEnum
+import com.booktopia.enums.Errors
 import com.booktopia.enums.StatusEnum
 import com.booktopia.exception.NotFoundException
 import com.booktopia.models.BookModel
@@ -8,7 +9,10 @@ import com.booktopia.repositories.BookRepository
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.SpyK
 import io.mockk.junit5.MockKExtension
+import io.mockk.just
+import io.mockk.runs
 import io.mockk.verify
 import net.bytebuddy.utility.RandomString
 import org.junit.jupiter.api.Assertions.*
@@ -29,6 +33,7 @@ class BookServiceTest{
     private lateinit var bookRepository: BookRepository
 
     @InjectMockKs
+    @SpyK
     private lateinit var bookService: BookService
 
     @Test
@@ -130,6 +135,40 @@ class BookServiceTest{
 
         verify (exactly = 1){ bookRepository.existsById(id) }
         verify (exactly = 0){ bookRepository.save(any())  }
+    }
+
+    @Test
+    fun `should delete book`(){
+        val id: Int= Random.nextInt()
+        val fakeAdmin = buildBook(id)
+
+        every { bookService.findById(id) } returns fakeAdmin
+        every {
+            bookService.findBookInactive(id)
+            bookService.update(fakeAdmin)
+        } just runs
+
+        bookService.delete(id)
+        verify (exactly = 1){ bookService.findById(id) }
+        verify (exactly = 1){ bookService.findBookInactive(id) }
+        verify (exactly = 1){ bookService.update(fakeAdmin) }
+    }
+
+    @Test
+    fun `should throw not found when delete book`(){
+        val id: Int = java.util.Random().nextInt()
+
+        every { bookService.findById(id) } throws NotFoundException(Errors.B201.message.format(id), Errors.B201.code)
+
+
+        val error = assertThrows<NotFoundException>{ bookService.delete(id) }
+
+        assertEquals("Book id [$id] not exists", error.message)
+        assertEquals("B-201", error.errorCode)
+
+        verify (exactly = 1){ bookService.findById(id) }
+        verify (exactly = 0){ bookService.findBookInactive(id) }
+        verify (exactly = 0){ bookService.update(any()) }
     }
 
     fun buildBook(

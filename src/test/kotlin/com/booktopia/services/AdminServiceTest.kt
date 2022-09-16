@@ -1,5 +1,6 @@
 package com.booktopia.services
 
+import com.booktopia.enums.Errors
 import com.booktopia.enums.Role
 import com.booktopia.enums.StatusEnum
 import com.booktopia.exception.NotFoundException
@@ -8,7 +9,10 @@ import com.booktopia.repositories.AdminRepository
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.SpyK
 import io.mockk.junit5.MockKExtension
+import io.mockk.just
+import io.mockk.runs
 import io.mockk.verify
 import net.bytebuddy.utility.RandomString
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -31,6 +35,7 @@ class AdminServiceTest{
     private lateinit var bCrypt: BCryptPasswordEncoder
 
     @InjectMockKs
+    @SpyK
     private lateinit var adminService: AdminService
 
     @Test
@@ -123,6 +128,40 @@ class AdminServiceTest{
 
         verify (exactly = 1){ adminRepository.existsById(id) }
         verify (exactly = 0){ adminRepository.save(any())  }
+    }
+
+    @Test
+    fun `should delete admin`(){
+        val id: Int = java.util.Random().nextInt()
+        val fakeAdmin = buildAdmin(id,"064.687.863-80")
+
+        every { adminService.findById(id) } returns fakeAdmin
+        every {
+            adminService.findAdminInactive(id)
+            adminService.update(fakeAdmin)
+        } just runs
+
+        adminService.delete(id)
+        verify (exactly = 1){ adminService.findById(id) }
+        verify (exactly = 1){ adminService.findAdminInactive(id) }
+        verify (exactly = 1){ adminService.update(fakeAdmin) }
+    }
+
+    @Test
+    fun `should throw not found when delete admin`(){
+        val id: Int = java.util.Random().nextInt()
+
+        every { adminService.findById(id) } throws NotFoundException(Errors.B501.message.format(id), Errors.B501.code)
+
+
+        val error = assertThrows<NotFoundException>{ adminService.delete(id) }
+
+        assertEquals("Admin id [$id] not exists", error.message)
+        assertEquals("B-501", error.errorCode)
+
+        verify (exactly = 1){ adminService.findById(id) }
+        verify (exactly = 0){ adminService.findAdminInactive(id) }
+        verify (exactly = 0){ adminService.update(any()) }
     }
 
     fun buildAdmin(

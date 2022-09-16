@@ -10,6 +10,7 @@ import com.booktopia.repositories.ClientRepository
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.SpyK
 import io.mockk.junit5.MockKExtension
 import io.mockk.just
 import io.mockk.runs
@@ -35,6 +36,7 @@ class ClientServiceTest{
     private lateinit var addressService: AddressService
 
     @InjectMockKs
+    @SpyK
     private lateinit var clientService: ClientService
 
     @Test
@@ -139,6 +141,41 @@ class ClientServiceTest{
 
         verify (exactly = 1){ clientRepository.existsById(id) }
         verify (exactly = 0){ clientRepository.save(any())  }
+    }
+
+    @Test
+    fun `should delete admin`(){
+        val id: Int = Random().nextInt()
+        val fakeClient = buildClient(id,"064.687.863-80")
+
+        every { clientService.findById(id) } returns fakeClient
+        every { addressService.findById(fakeClient.address!!.id!!) } returns fakeClient.address!!
+        every {
+            clientService.findClientInactive(id)
+            clientService.update(fakeClient)
+            addressService.delete(fakeClient.address!!.id!!)
+        } just runs
+
+        clientService.delete(id)
+        verify (exactly = 1){ clientService.findById(id) }
+        verify (exactly = 1){ clientService.findClientInactive(id) }
+        verify (exactly = 1){ clientService.update(fakeClient) }
+    }
+
+    @Test
+    fun `should throw not found when delete admin`(){
+        val id: Int = Random().nextInt()
+
+        every { clientService.findById(id) } throws NotFoundException(Errors.B101.message.format(id), Errors.B101.code)
+
+
+        val error = assertThrows<NotFoundException>{ clientService.delete(id) }
+
+        assertEquals("Client id [$id] not exists", error.message)
+        assertEquals("B-101", error.errorCode)
+
+        verify (exactly = 1){ clientService.findById(id) }
+        verify (exactly = 0){ clientService.update(any()) }
     }
 
     fun buildClient(
