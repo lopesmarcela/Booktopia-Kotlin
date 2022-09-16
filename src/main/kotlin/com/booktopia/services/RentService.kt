@@ -1,6 +1,7 @@
 package com.booktopia.services
 
 import com.booktopia.enums.Errors
+import com.booktopia.exception.BadRequestException
 import com.booktopia.exception.NotFoundException
 import com.booktopia.extensions.calculateFine
 import com.booktopia.models.BookModel
@@ -38,6 +39,12 @@ class RentService(
     }
 
     fun returnBook(rent: RentModel){
+        if (!rentRepository.existsById(rent.id!!)){
+            throw NotFoundException(Errors.B301.message.format(rent.id!!), Errors.B301.code)
+        }
+        if (rent.returnDate != null){
+            throw BadRequestException(Errors.B304.message.format(rent.id!!), Errors.B304.code)
+        }
         rent.fine = rent.calculateFine(rent)
 
         val book: BookModel = bookService.findById(rent.book!!.id!!)

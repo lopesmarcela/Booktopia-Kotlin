@@ -31,6 +31,9 @@ class BookService(
     }
 
     fun update(book: BookModel){
+        if (!bookRepository.existsById(book.id!!)){
+            throw NotFoundException(Errors.B201.message.format(book.id!!), Errors.B201.code)
+        }
         bookRepository.save(book)
     }
 

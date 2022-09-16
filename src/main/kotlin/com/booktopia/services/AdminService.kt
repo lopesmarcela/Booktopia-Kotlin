@@ -36,6 +36,9 @@ class AdminService(
     }
 
     fun update(admin: AdminModel){
+        if (!adminRepository.existsById(admin.id!!)){
+            throw NotFoundException(Errors.B501.message.format(admin.id!!), Errors.B501.code)
+        }
         adminRepository.save(admin)
     }
 

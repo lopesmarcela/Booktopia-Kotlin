@@ -37,6 +37,9 @@ class ClientService(
     }
 
     fun update(client: ClientModel){
+        if (!clientRepository.existsById(client.id!!)){
+            throw NotFoundException(Errors.B101.message.format(client.id!!), Errors.B101.code)
+        }
         clientRepository.save(client)
     }
 

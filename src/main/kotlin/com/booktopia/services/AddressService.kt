@@ -28,6 +28,9 @@ class AddressService(
     }
 
     fun update(address: AddressModel){
+        if (!addressRepository.existsById(address.id!!)){
+            throw NotFoundException(Errors.B401.message.format(address.id!!), Errors.B401.code)
+        }
         addressRepository.save(address)
     }
 
