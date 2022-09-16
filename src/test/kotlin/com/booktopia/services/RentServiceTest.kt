@@ -50,6 +50,28 @@ class RentServiceTest{
         verify (exactly = 1){ rentRepository.findAll(pageable) }
     }
 
+    @Test
+    fun `should create client`(){
+        val rent = buildRent()
+
+        every { bookService.findById(rent.book!!.id!!) } returns rent.book!!
+        every { clientService.findById(rent.client!!.id!!) } returns rent.client!!
+        every {
+            bookService.findBookInactive(rent.book!!.id!!)
+            clientService.findClientInactive(rent.client!!.id!!)
+            bookService.decreasesStock(rent.book!!)
+        } just runs
+        every { rentRepository.save(rent) } returns rent
+
+        rentService.create(rent)
+
+        verify (exactly = 1){ bookService.findById(rent.book!!.id!!) }
+        verify (exactly = 1){ clientService.findById(rent.client!!.id!!) }
+        verify (exactly = 1){ bookService.findBookInactive(rent.book!!.id!!) }
+        verify (exactly = 1){ clientService.findClientInactive(rent.client!!.id!!) }
+        verify (exactly = 1){  bookService.decreasesStock(rent.book!!) }
+        verify (exactly = 1){ rentRepository.save(rent) }
+    }
     fun buildRent(
         id: Int? = Random().nextInt(),
         fine: BigDecimal = Random(6).nextDouble().toBigDecimal(),
