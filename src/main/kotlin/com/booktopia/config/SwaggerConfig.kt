@@ -39,18 +39,6 @@ class SwaggerConfig {
                     .description("Sistema gerenciador de aluguel de livros")
                     .build()
             )
-
-            .securitySchemes(
-                Arrays.asList(
-                    ApiKey("Token Access", HttpHeaders.AUTHORIZATION, In.HEADER.name)
-                )
-            )
-            .securityContexts(
-                Arrays.asList(securityContext())
-            );
-
-
-
     }
 
     private fun responseMessageForGET(): List<ResponseMessage?>? {
@@ -76,21 +64,6 @@ class SwaggerConfig {
                 )
             }
         }
-    }
-    private fun securityContext(): SecurityContext? {
-        return SecurityContext.builder()
-            .securityReferences(defaultAuth())
-            .forPaths(PathSelectors.regex("^(?!auth).*$"))
-            .build()
-    }
-
-    fun defaultAuth(): List<SecurityReference?>? {
-        val authorizationScope = AuthorizationScope("ADMIN", "accessEverything")
-        val authorizationScopes: Array<AuthorizationScope?> = arrayOfNulls<AuthorizationScope>(1)
-        authorizationScopes[0] = authorizationScope
-        return Arrays.asList(
-            SecurityReference("Token Access", authorizationScopes)
-        )
     }
 
 }

@@ -6,6 +6,8 @@ enum class Errors(val code: String, val message: String) {
     B000("B-000","Access Denied"),
     //Validation
     B001("B-001","Invalid Request"),
+    //Authentication
+    B002("B-002","Admin not found"),
 
     // Client errors 100-199
     B101("B-101","Client id [%s] not exists"),
